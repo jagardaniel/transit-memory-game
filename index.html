@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
     <title>Gissa alla stationer!</title>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="map" class="map">
+      <div class="search-container">
+        <input type="text" id="station-input" placeholder="Station..." />
+        <button id="reset-game">Reset game</button>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

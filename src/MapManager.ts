@@ -7,15 +7,21 @@ export class MapManager {
   private _map: L.Map;
   private _stationMarkers: Map<string, L.CircleMarker>;
   private _game: Game;
+  private _initialCoordinates: [number, number];
+  private _intialZoomLevel: number;
 
   constructor(game: Game, initialCoordinates: [number, number], zoomLevel: number) {
+    this._initialCoordinates = initialCoordinates;
+    this._intialZoomLevel = zoomLevel;
+
     var renderer = L.svg({ padding: 50 });
-    this._map = L.map("map", { renderer: renderer }).setView(initialCoordinates, zoomLevel);
+    this._map = L.map("map", { renderer: renderer, zoomControl: false }).setView(this._initialCoordinates, this._intialZoomLevel);
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
       maxZoom: 17,
       minZoom: 10,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(this._map);
+    L.control.zoom({ position: "bottomright" }).addTo(this._map);
 
     this._stationMarkers = new Map();
     this._game = game;
@@ -72,5 +78,9 @@ export class MapManager {
       const { x, y } = station.coordinates;
       this._map.flyTo([x, y], 15);
     }
+  }
+
+  public resetZoom(): void {
+    this._map.flyTo(this._initialCoordinates, this._intialZoomLevel);
   }
 }

@@ -8,3 +8,7 @@ export function loadCompletedGuesses(): string[] {
   const guesses = localStorage.getItem(STORAGE_KEY);
   return guesses ? JSON.parse(guesses) : [];
 }
+
+export function clearCompletedGuesses(): void {
+  localStorage.removeItem(STORAGE_KEY);
+}

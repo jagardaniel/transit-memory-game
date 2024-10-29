@@ -73,6 +73,10 @@ export class Game {
     });
   }
 
+  public reset(): void {
+    this._completedGuesses.clear();
+  }
+
   get lines(): Line[] {
     return this._lines;
   }
