@@ -57,21 +57,34 @@ class GameApp {
   private handleGuess(): void {
     if (this._stationInput) {
       const stationName = this._stationInput.value.trim();
+
       if (this._game.makeGuess(stationName)) {
+        const station = this._game.getStation(stationName);
+        if (!station) return;
+
         this._stationInput.value = "";
 
         // Save to local storage
         saveCompletedGuesses(this._game.completedGuesses);
 
         this.updateUI();
-        this._mapManager.addStationLabel(stationName);
+        this._mapManager.addStationLabel(station.name);
+        this._mapManager.markStationAsGuessed(station.name);
         this._mapManager.flyToStation(stationName);
       } else {
-        this._stationInput.classList.add("shake");
+        let styling = ["shake"];
+
+        if (this._game.completedGuesses.some((x) => x.toLocaleLowerCase() === stationName.toLocaleLowerCase())) {
+          styling.push("duplicate-guess");
+        } else {
+          styling.push("wrong-guess");
+        }
+
+        this._stationInput.classList.add(...styling);
 
         setTimeout(() => {
           if (this._stationInput) {
-            this._stationInput.classList.remove("shake");
+            this._stationInput.classList.remove(...styling);
           }
         }, 500);
       }
@@ -80,7 +93,6 @@ class GameApp {
 
   private handleGuessListClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-
     this._mapManager.flyToStation(target.innerHTML);
   }
 

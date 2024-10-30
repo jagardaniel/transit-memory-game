@@ -19,6 +19,7 @@ body {
   flex: 2;
   border-right: 1px solid #d3d3d3;
   padding: 15px;
+  overflow: auto;
 }
 
 .map {
@@ -30,7 +31,7 @@ body {
   top: 2%;
   z-index: 800;
   width: 150px;
-  left: 1%;
+  left: 2%;
 }
 
 h3 {
@@ -70,17 +71,14 @@ li {
   cursor: pointer;
 }
 
-input:focus {
-  outline: none;
-}
-
-input[type="text"] {
+.station-input {
   width: 350px;
   height: 50px;
   padding: 5px 20px;
   font-size: 20px;
   border: 2px solid #555555;
   border-radius: 10px;
+  color: #363636;
 }
 
 input::placeholder {
@@ -88,7 +86,10 @@ input::placeholder {
   opacity: 30%;
 }
 
-/* Animation for invalid guess */
+input:focus {
+  outline: none;
+}
+
 .shake {
   animation: shake 0.2s ease-in-out 0s 2;
 }
@@ -106,4 +107,12 @@ input::placeholder {
   100% {
     margin-left: 0rem;
   }
+}
+
+.wrong-guess {
+  border: 2px solid red;
+}
+
+.duplicate-guess {
+  border: 2px solid #e5d700;
 }

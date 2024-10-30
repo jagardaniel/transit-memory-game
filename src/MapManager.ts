@@ -34,7 +34,10 @@ export class MapManager {
     this.renderStations();
 
     // Show labels for already guessed stations on page refresh
-    completedGuesses.forEach((stationName) => this.addStationLabel(stationName));
+    completedGuesses.forEach((stationName) => {
+      this.addStationLabel(stationName);
+      this.markStationAsGuessed(stationName);
+    });
   }
 
   private async renderLines(): Promise<void> {
@@ -77,21 +80,32 @@ export class MapManager {
     this._stationMarkers.set(station.name, marker);
   }
 
-  public addStationLabel(stationName: string): void {
-    // Get the "real" station name from the object since the stationMarkers keys are case sensitive
-    const station = this._game.getStation(stationName);
-    if (!station) return;
+  // Enable this method when text labels works better and is a layer above
+  public markStationAsGuessed(stationName: string): void {
+    /*
+    const marker = this._stationMarkers.get(stationName);
 
-    const marker = this._stationMarkers.get(station.name);
+    if (marker) {
+      marker.setStyle({
+        color: "#ffffff",
+        fillColor: "#d3d3d3",
+        weight: 1,
+      });
+    }
+    */
+  }
+
+  public addStationLabel(stationName: string): void {
+    const marker = this._stationMarkers.get(stationName);
     if (!marker) return;
 
     const labelIcon = L.divIcon({
       className: "station-label",
-      html: `<span>${station.name}</span>`,
+      html: `<span>${stationName}</span>`,
     });
 
     const labelMarker = L.marker(marker.getLatLng(), { icon: labelIcon });
-    this._stationLabels.set(station.name, labelMarker);
+    this._stationLabels.set(stationName, labelMarker);
     labelMarker.addTo(this._map);
   }
 
