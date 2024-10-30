@@ -6,6 +6,7 @@ import { loadGeoJSON } from "./helpers/geoJSONLoader";
 export class MapManager {
   private _map: L.Map;
   private _stationMarkers: Map<string, L.CircleMarker>;
+  private _stationLabels: Map<string, L.Marker>;
   private _game: Game;
   private _initialCoordinates: [number, number];
   private _intialZoomLevel: number;
@@ -24,12 +25,16 @@ export class MapManager {
     L.control.zoom({ position: "bottomright" }).addTo(this._map);
 
     this._stationMarkers = new Map();
+    this._stationLabels = new Map();
     this._game = game;
   }
 
-  public initializeMap(): void {
+  public initializeMap(completedGuesses: string[]): void {
     this.renderLines();
     this.renderStations();
+
+    // Show labels for already guessed stations on page refresh
+    completedGuesses.forEach((stationName) => this.addStationLabel(stationName));
   }
 
   private async renderLines(): Promise<void> {
@@ -70,6 +75,29 @@ export class MapManager {
     }).addTo(this._map);
 
     this._stationMarkers.set(station.name, marker);
+  }
+
+  public addStationLabel(stationName: string): void {
+    // Get the "real" station name from the object since the stationMarkers keys are case sensitive
+    const station = this._game.getStation(stationName);
+    if (!station) return;
+
+    const marker = this._stationMarkers.get(station.name);
+    if (!marker) return;
+
+    const labelIcon = L.divIcon({
+      className: "station-label",
+      html: `<span>${station.name}</span>`,
+    });
+
+    const labelMarker = L.marker(marker.getLatLng(), { icon: labelIcon });
+    this._stationLabels.set(station.name, labelMarker);
+    labelMarker.addTo(this._map);
+  }
+
+  public removeAllLabels(): void {
+    this._stationLabels.forEach((labelMarker) => labelMarker.remove());
+    this._stationLabels.clear();
   }
 
   public flyToStation(stationName: string): void {

@@ -26,7 +26,7 @@ class GameApp {
 
     this._game.setInitialGuesses(savedGuesses);
     this.updateUI();
-    this._mapManager.initializeMap();
+    this._mapManager.initializeMap(savedGuesses);
   }
 
   private setupEventListeners(): void {
@@ -55,6 +55,7 @@ class GameApp {
         saveCompletedGuesses(this._game.completedGuesses);
 
         this.updateUI();
+        this._mapManager.addStationLabel(stationName);
         this._mapManager.flyToStation(stationName);
       } else {
         this._stationInput.classList.add("shake");
@@ -79,11 +80,18 @@ class GameApp {
       this._stationInput.value = "";
     }
 
+    this._mapManager.removeAllLabels();
     this._mapManager.resetZoom();
   }
 
   private updateUI(): void {
-    // Work in progress
+    const tempStats = document.querySelector<HTMLInputElement>("#stats-temp");
+    const currentGuessed = this._game.completedGuesses.length;
+    const totalStations = this._game.getStations().length;
+
+    if (tempStats) {
+      tempStats.innerHTML = `${currentGuessed} of ${totalStations} stations found`;
+    }
   }
 }
 
