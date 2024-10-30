@@ -36,8 +36,7 @@ export class MapManager {
     // Show labels for already guessed stations on page refresh
     completedGuesses.forEach((stationName) => {
       this.addStationLabel(stationName);
-      // Enable this method when text labels works better and is a layer above
-      //this.markStationAsGuessed(stationName);
+      this.markStationAsGuessed(stationName);
     });
   }
 
@@ -81,22 +80,15 @@ export class MapManager {
     this._stationMarkers.set(station.name, marker);
   }
 
-  // Enable this method when text labels works better and is a layer above
-  /*
   public markStationAsGuessed(stationName: string): void {
-
     const marker = this._stationMarkers.get(stationName);
 
+    // It looks pretty bad to set a custom color right now when the labels
+    // aren't implemented correctly. Do nothing with a guessed station marker yet
     if (marker) {
-      marker.setStyle({
-        color: "#ffffff",
-        fillColor: "#d3d3d3",
-        weight: 1,
-      });
+      marker.setStyle({});
     }
-
   }
-    */
 
   public addStationLabel(stationName: string): void {
     const marker = this._stationMarkers.get(stationName);
