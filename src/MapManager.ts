@@ -36,7 +36,8 @@ export class MapManager {
     // Show labels for already guessed stations on page refresh
     completedGuesses.forEach((stationName) => {
       this.addStationLabel(stationName);
-      this.markStationAsGuessed(stationName);
+      // Enable this method when text labels works better and is a layer above
+      //this.markStationAsGuessed(stationName);
     });
   }
 
@@ -81,8 +82,9 @@ export class MapManager {
   }
 
   // Enable this method when text labels works better and is a layer above
+  /*
   public markStationAsGuessed(stationName: string): void {
-    /*
+
     const marker = this._stationMarkers.get(stationName);
 
     if (marker) {
@@ -92,8 +94,9 @@ export class MapManager {
         weight: 1,
       });
     }
-    */
+
   }
+    */
 
   public addStationLabel(stationName: string): void {
     const marker = this._stationMarkers.get(stationName);
