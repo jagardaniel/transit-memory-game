@@ -27,6 +27,10 @@ class GameApp {
     this._game.setInitialGuesses(savedGuesses);
     this.updateUI();
     this._mapManager.initializeMap(savedGuesses);
+
+    if (this._stationInput) {
+      this._stationInput.focus();
+    }
   }
 
   private setupEventListeners(): void {
@@ -37,6 +41,11 @@ class GameApp {
           this.handleGuess();
         }
       });
+    }
+
+    const guessList = document.getElementById("guess-list");
+    if (guessList) {
+      guessList.addEventListener("click", (event) => this.handleGuessListClick(event));
     }
 
     const resetButton = document.querySelector<HTMLButtonElement>("#reset-game");
@@ -67,6 +76,12 @@ class GameApp {
         }, 500);
       }
     }
+  }
+
+  private handleGuessListClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    this._mapManager.flyToStation(target.innerHTML);
   }
 
   private resetGame(): void {
