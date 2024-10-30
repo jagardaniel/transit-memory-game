@@ -10,8 +10,19 @@ body {
   height: 100%;
 }
 
-#map {
+.container {
+  display: flex;
   height: 100%;
+}
+
+.stats {
+  flex: 2;
+  border-right: 1px solid #d3d3d3;
+  padding: 15px;
+}
+
+.map {
+  flex: 8;
 }
 
 .search-container {
@@ -20,6 +31,43 @@ body {
   z-index: 800;
   width: 150px;
   left: 1%;
+}
+
+h3 {
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+p {
+  color: #70757a;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+hr {
+  color: #cccccc;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  opacity: 20%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  padding: 1px;
+  margin-bottom: 2px;
+}
+
+ul li:hover {
+  background-color: #eeeeee;
+}
+
+li {
+  cursor: pointer;
 }
 
 input:focus {
@@ -31,7 +79,7 @@ input[type="text"] {
   height: 50px;
   padding: 5px 20px;
   font-size: 20px;
-  border: 1px solid #555555;
+  border: 2px solid #555555;
   border-radius: 10px;
 }
 

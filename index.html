@@ -4,14 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-    <title>Gissa alla stationer!</title>
+    <title>Gissa stationer</title>
   </head>
   <body>
-    <div id="map" class="map">
-      <div class="search-container">
-        <input type="text" id="station-input" placeholder="Station..." />
-        <button id="reset-game">Reset game</button>
-        <p id="stats-temp">Temp stats</p>
+    <div class="container">
+      <div class="stats">
+        <div class="stats-overview">
+          <h3>Gissningar per linje</h3>
+          <ul id="line-stats"></ul>
+        </div>
+        <hr />
+        <div class="stats-guesses">
+          <h3>Korrekta gissningar</h3>
+          <p id="guess-list-total"></p>
+          <ul id="guess-list"></ul>
+
+          <!-- Temporary reset button -->
+          <button id="reset-game">Reset game</button>
+        </div>
+      </div>
+      <div id="map" class="map">
+        <div class="search-container">
+          <input type="text" id="station-input" placeholder="Station..." />
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

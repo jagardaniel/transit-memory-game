@@ -19,7 +19,7 @@ export class MapManager {
     this._map = L.map("map", { renderer: renderer, zoomControl: false }).setView(this._initialCoordinates, this._intialZoomLevel);
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
       maxZoom: 17,
-      minZoom: 10,
+      minZoom: 11,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(this._map);
     L.control.zoom({ position: "bottomright" }).addTo(this._map);

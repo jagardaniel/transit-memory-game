@@ -85,13 +85,46 @@ class GameApp {
   }
 
   private updateUI(): void {
-    const tempStats = document.querySelector<HTMLInputElement>("#stats-temp");
-    const currentGuessed = this._game.completedGuesses.length;
-    const totalStations = this._game.getStations().length;
+    this.updateLineOverview();
+    this.updateGuessList();
+  }
 
-    if (tempStats) {
-      tempStats.innerHTML = `${currentGuessed} of ${totalStations} stations found`;
-    }
+  private updateLineOverview(): void {
+    const lineStats = document.getElementById("line-stats") as HTMLParagraphElement;
+    if (!lineStats) return;
+
+    lineStats.innerHTML = "";
+
+    this._game.getAllLineStats().forEach((line) => {
+      const currentGuesses = line.completedGuesses;
+      const totalStations = line.totalStations;
+      const percentageComplete = Math.round((currentGuesses / totalStations) * 100);
+
+      const listItem = document.createElement("li");
+      listItem.textContent = `${line.lineName} - ${currentGuesses}/${totalStations} (${percentageComplete}%)`;
+      lineStats.appendChild(listItem);
+    });
+  }
+
+  private updateGuessList(): void {
+    const guessList = document.getElementById("guess-list") as HTMLUListElement;
+    const guessListTotal = document.getElementById("guess-list-total") as HTMLParagraphElement;
+    if (!guessList || !guessListTotal) return;
+
+    guessList.innerHTML = "";
+    guessListTotal.innerHTML = "";
+
+    const currentGuesses = this._game.completedGuesses.length;
+    const totalStations = this._game.getStations().length;
+    const percentageComplete = Math.round((currentGuesses / totalStations) * 100);
+
+    guessListTotal.innerHTML = `${currentGuesses} av ${totalStations} stationer upptäckta (${percentageComplete}%)`;
+
+    [...this._game.completedGuesses].reverse().forEach((station) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = station;
+      guessList.appendChild(listItem);
+    });
   }
 }
 
