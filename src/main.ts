@@ -115,7 +115,7 @@ class GameApp {
 
   private handleGuessListClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    this._mapManager.flyToStation(target.innerHTML);
+    this._mapManager.flyToStation(target.innerText);
   }
 
   private resetGame(): void {
