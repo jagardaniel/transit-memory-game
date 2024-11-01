@@ -130,6 +130,7 @@ class GameApp {
     }
 
     this._mapManager.removeAllLabels();
+    this._mapManager.revertMarkerStyles();
     this._mapManager.resetZoom();
   }
 

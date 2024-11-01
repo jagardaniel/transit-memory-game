@@ -3,6 +3,24 @@ import { Game } from "./models/Game";
 import { Station } from "./models/Station";
 import { loadGeoJSON } from "./helpers/geoJSONLoader";
 
+const DEFAULT_MARKER_STYLE = {
+  color: "#4e4e4e",
+  fillColor: "#ffffff",
+  fillOpacity: 1.0,
+  radius: 4,
+  weight: 1,
+  pane: "stationMarker",
+};
+
+const GUESSED_MARKER_STYLE = {
+  color: "#ffffff",
+  fillColor: "green",
+  fillOpacity: 0.9,
+  radius: 4,
+  weight: 2,
+  pane: "stationMarker",
+};
+
 export class MapManager {
   private _map: L.Map;
   private _stationMarkers: Map<string, L.CircleMarker>;
@@ -86,16 +104,7 @@ export class MapManager {
 
   private addStationMarker(station: Station): void {
     const { x, y } = station.coordinates;
-
-    const marker = L.circleMarker([x, y], {
-      color: "#4e4e4e",
-      fillColor: "#ffffff",
-      fillOpacity: 1.0,
-      radius: 4,
-      weight: 1,
-      pane: "stationMarker",
-    }).addTo(this._map);
-
+    const marker = L.circleMarker([x, y], DEFAULT_MARKER_STYLE).addTo(this._map);
     this._stationMarkers.set(station.name, marker);
   }
 
@@ -104,14 +113,7 @@ export class MapManager {
 
     // Mark completed guess as green for now. Doesn't look very good but it is something
     if (marker) {
-      marker.setStyle({
-        color: "#ffffff",
-        fillColor: "green",
-        fillOpacity: 0.9,
-        radius: 4,
-        weight: 2,
-        pane: "stationMarker",
-      });
+      this.applyMarkerStyle(marker, GUESSED_MARKER_STYLE);
     }
   }
 
@@ -133,8 +135,16 @@ export class MapManager {
   }
 
   public removeAllLabels(): void {
-    this._stationLabels.forEach((labelMarker) => labelMarker.remove());
+    this._stationLabels.forEach((labelMarker) => labelMarker.unbindTooltip());
     this._stationLabels.clear();
+  }
+
+  private applyMarkerStyle(marker: L.CircleMarker, style: L.PathOptions): void {
+    marker.setStyle(style);
+  }
+
+  public revertMarkerStyles(): void {
+    this._stationMarkers.forEach((marker) => this.applyMarkerStyle(marker, DEFAULT_MARKER_STYLE));
   }
 
   public flyToStation(stationName: string): void {
