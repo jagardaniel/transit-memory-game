@@ -6,7 +6,7 @@ import { loadGeoJSON } from "./helpers/geoJSONLoader";
 export class MapManager {
   private _map: L.Map;
   private _stationMarkers: Map<string, L.CircleMarker>;
-  private _stationLabels: Map<string, L.Marker>;
+  private _stationLabels: Map<string, L.CircleMarker>;
   private _game: Game;
   private _initialCoordinates: [number, number];
   private _intialZoomLevel: number;
@@ -26,6 +26,21 @@ export class MapManager {
 
     this._stationMarkers = new Map();
     this._stationLabels = new Map();
+
+    // Layer for station markers
+    const markerPane = this._map.createPane("stationMarker");
+    markerPane.style.zIndex = "700";
+
+    // Layer for station text labels
+    const labelPane = this._map.createPane("stationLabel");
+    labelPane.style.zIndex = "800";
+
+    this.toggleLabelVisibility(this._map.getZoom());
+
+    this._map.on("zoomend", () => {
+      this.toggleLabelVisibility(this._map.getZoom());
+    });
+
     this._game = game;
   }
 
@@ -55,14 +70,18 @@ export class MapManager {
   }
 
   private renderStations(): void {
-    const locationMarker = this._map.createPane("locationMarker");
-    locationMarker.style.zIndex = "700";
-
     const allStations = this._game.getStations();
 
     allStations.forEach((station) => {
       this.addStationMarker(station);
     });
+  }
+
+  private toggleLabelVisibility(zoomLevel: number): void {
+    const labelPane = this._map.getPane("stationLabel");
+    if (labelPane) {
+      labelPane.style.display = zoomLevel >= 13 ? "block" : "none";
+    }
   }
 
   private addStationMarker(station: Station): void {
@@ -74,7 +93,7 @@ export class MapManager {
       fillOpacity: 1.0,
       radius: 4,
       weight: 1,
-      pane: "locationMarker",
+      pane: "stationMarker",
     }).addTo(this._map);
 
     this._stationMarkers.set(station.name, marker);
@@ -83,10 +102,16 @@ export class MapManager {
   public markStationAsGuessed(stationName: string): void {
     const marker = this._stationMarkers.get(stationName);
 
-    // It looks pretty bad to set a custom color right now when the labels
-    // aren't implemented correctly. Do nothing with a guessed station marker yet
+    // Mark completed guess as green for now. Doesn't look very good but it is something
     if (marker) {
-      marker.setStyle({});
+      marker.setStyle({
+        color: "#ffffff",
+        fillColor: "green",
+        fillOpacity: 0.9,
+        radius: 4,
+        weight: 2,
+        pane: "stationMarker",
+      });
     }
   }
 
@@ -94,14 +119,17 @@ export class MapManager {
     const marker = this._stationMarkers.get(stationName);
     if (!marker) return;
 
-    const labelIcon = L.divIcon({
-      className: "station-label",
-      html: `<span>${stationName}</span>`,
-    });
+    marker
+      .bindTooltip(stationName, {
+        permanent: true,
+        direction: "center",
+        className: "station-tooltip",
+        offset: L.point(0, -12),
+        pane: "stationLabel",
+      })
+      .openTooltip();
 
-    const labelMarker = L.marker(marker.getLatLng(), { icon: labelIcon });
-    this._stationLabels.set(stationName, labelMarker);
-    labelMarker.addTo(this._map);
+    this._stationLabels.set(stationName, marker);
   }
 
   public removeAllLabels(): void {
