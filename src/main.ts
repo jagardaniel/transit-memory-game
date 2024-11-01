@@ -10,6 +10,7 @@ class GameApp {
   private _game: Game;
   private _mapManager: MapManager;
   private _stationInput: HTMLInputElement | null;
+  private _stationColorMap = new Map<string, string[]>();
 
   constructor(game: Game, mapManager: MapManager) {
     this._game = game;
@@ -25,6 +26,7 @@ class GameApp {
     const savedGuesses = loadCompletedGuesses();
 
     this._game.setInitialGuesses(savedGuesses);
+    this.loadStationColors();
     this.updateUI();
     this._mapManager.initializeMap(savedGuesses);
 
@@ -52,6 +54,26 @@ class GameApp {
     if (resetButton) {
       resetButton.addEventListener("click", () => this.resetGame());
     }
+  }
+
+  // We want to display colors for each line that a stations belongs to
+  // so create a map that hold all the stations and their colors.
+  // Should be better than just doing this lookup for every station every UI update.
+  private loadStationColors(): void {
+    this._game.lines.forEach((line) => {
+      const color = line.color;
+
+      line.stations.forEach((station) => {
+        const colors = this._stationColorMap.get(station.name) || [];
+        colors.push(color);
+
+        this._stationColorMap.set(station.name, colors);
+      });
+    });
+  }
+
+  private getStationColors(stationName: string): string[] | null {
+    return this._stationColorMap.get(stationName) || null;
   }
 
   private handleGuess(): void {
@@ -149,7 +171,21 @@ class GameApp {
 
     [...this._game.completedGuesses].reverse().forEach((station) => {
       const listItem = document.createElement("li");
-      listItem.textContent = station;
+
+      const colorIndicatorContainer = document.createElement("div");
+      colorIndicatorContainer.className = "color-indicator-container";
+
+      const stationColors = this.getStationColors(station);
+      stationColors?.forEach((color) => {
+        const colorLine = document.createElement("span");
+        colorLine.className = "color-line";
+        colorLine.style.backgroundColor = color;
+        colorIndicatorContainer.appendChild(colorLine);
+      });
+
+      listItem.appendChild(colorIndicatorContainer);
+      listItem.appendChild(document.createTextNode(station));
+
       guessList.appendChild(listItem);
     });
   }

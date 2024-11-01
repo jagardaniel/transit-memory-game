@@ -12,28 +12,39 @@ body {
 
 .container {
   display: flex;
-  height: 100%;
+  height: 100vh;
 }
 
-.stats {
-  flex: 2;
+#stats {
+  width: 15%;
   border-right: 1px solid #d3d3d3;
   padding: 15px;
   overflow: auto;
 }
 
-.map {
-  flex: 8;
+#map {
+  width: 85%;
+  position: relative;
 }
 
 .search-container {
   position: absolute;
   top: 2%;
-  z-index: 800;
-  width: 150px;
   left: 2%;
+  z-index: 800;
 }
 
+.station-input {
+  width: 350px;
+  height: 50px;
+  padding: 5px 20px;
+  font-size: 20px;
+  border: 2px solid rgba(85, 85, 85, 0.5);
+  border-radius: 10px;
+  color: #363636;
+}
+
+/* FIX */
 h3 {
   font-weight: normal;
   margin-bottom: 5px;
@@ -58,27 +69,14 @@ ul {
   padding: 0;
 }
 
-ul li {
-  padding: 1px;
-  margin-bottom: 2px;
-}
-
 ul li:hover {
   background-color: #eeeeee;
 }
 
 li {
+  padding: 1px;
+  margin-bottom: 2px;
   cursor: pointer;
-}
-
-.station-input {
-  width: 350px;
-  height: 50px;
-  padding: 5px 20px;
-  font-size: 20px;
-  border: 2px solid #555555;
-  border-radius: 10px;
-  color: #363636;
 }
 
 input::placeholder {
@@ -95,17 +93,15 @@ input:focus {
 }
 
 @keyframes shake {
-  0% {
-    margin-left: 0rem;
+  0%,
+  100% {
+    transform: translateX(0);
   }
   25% {
-    margin-left: 0.5rem;
+    transform: translateX(0.5rem);
   }
   75% {
-    margin-left: -0.5rem;
-  }
-  100% {
-    margin-left: 0rem;
+    transform: translateX(-0.5rem);
   }
 }
 
@@ -115,4 +111,24 @@ input:focus {
 
 .duplicate-guess {
   border: 2px solid #e5d700;
+}
+
+#guess-list li {
+  display: flex;
+  align-items: center;
+  padding: 1px 0;
+}
+
+/* Container for the color lines next to each station */
+.color-indicator-container {
+  display: inline-flex;
+  margin-right: 5px;
+  align-items: center;
+}
+
+/* Individual color line styling */
+.color-line {
+  width: 4px; /* Width of each line */
+  height: 25px; /* Height of each line */
+  margin-right: 3px;
 }
