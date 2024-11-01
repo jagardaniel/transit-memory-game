@@ -96,6 +96,12 @@ describe("Game", () => {
     expect(station).toBeNull();
   });
 
+  it("Get station in lower case", () => {
+    const station = game.getStation("ropsten");
+    expect(station).toBeInstanceOf(Station);
+    expect(station?.name).toBe("Ropsten");
+  });
+
   it("Get all unique stations", () => {
     const stations = game.getStations();
     const station1 = stations.filter((e) => e.name === "T-Centralen").length;
