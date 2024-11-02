@@ -14,7 +14,7 @@ export class MapManager {
     features: [],
   };
 
-  constructor(game: Game, initialCoordinates: [number, number], initialZoomLevel: number, completedGuesses: string[] = []) {
+  constructor(game: Game, initialCoordinates: [number, number], initialZoomLevel: number) {
     this._game = game;
 
     this._initialCoordinates = initialCoordinates;
