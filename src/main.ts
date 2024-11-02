@@ -4,7 +4,6 @@ import { MapManager } from "./MapManager";
 import { Game } from "./models/Game";
 
 import "./style.css";
-import "leaflet/dist/leaflet.css";
 
 class GameApp {
   private _game: Game;
@@ -25,10 +24,10 @@ class GameApp {
     // Load completed guesses from local storage
     const savedGuesses = loadCompletedGuesses();
 
+    this._mapManager.initializeMap(savedGuesses);
     this._game.setInitialGuesses(savedGuesses);
     this.loadStationColors();
     this.updateUI();
-    this._mapManager.initializeMap(savedGuesses);
 
     if (this._stationInput) {
       this._stationInput.focus();
@@ -90,7 +89,6 @@ class GameApp {
         saveCompletedGuesses(this._game.completedGuesses);
 
         this.updateUI();
-        this._mapManager.addStationLabel(station.name);
         this._mapManager.markStationAsGuessed(station.name);
         this._mapManager.flyToStation(stationName);
       } else {
@@ -129,8 +127,7 @@ class GameApp {
       this._stationInput.value = "";
     }
 
-    this._mapManager.removeAllLabels();
-    this._mapManager.revertMarkerStyles();
+    this._mapManager.resetStations();
     this._mapManager.resetZoom();
   }
 
@@ -194,7 +191,7 @@ class GameApp {
 
 document.addEventListener("DOMContentLoaded", () => {
   const game = new Game(metroLines);
-  const mapManager = new MapManager(game, [59.32743910768781, 18.071136585570766], 11);
+  const mapManager = new MapManager(game, [18.071136585570766, 59.32743910768781], 10);
 
   new GameApp(game, mapManager);
 });
