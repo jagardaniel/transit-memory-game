@@ -49,7 +49,7 @@ input {
   color: #363636;
 
   /* Icon inside text form */
-  background-image: url("icons/train.svg");
+  background-image: url("/icons/train.svg");
   background-repeat: no-repeat;
   background-position: 10px center;
 }
