@@ -13,6 +13,7 @@ export class MapManager {
     type: "FeatureCollection",
     features: [],
   };
+  private _stationColorMap = new Map<string, string[]>();
 
   constructor(game: Game, initialCoordinates: [number, number], initialZoomLevel: number) {
     this._game = game;
@@ -47,6 +48,8 @@ export class MapManager {
       minZoom: 10,
       maxZoom: 15,
     });
+
+    this.loadStationColors();
   }
 
   private async onMapLoad(completedGuesses: string[] = []): Promise<void> {
@@ -83,11 +86,43 @@ export class MapManager {
         properties: {
           name: station.name,
           guessed: completedGuesses.includes(station.name),
+          markedColor: this.getStationColor(station.name),
         },
       });
     });
 
     this._stationsGeoJSON.features = features;
+  }
+
+  // We want to mark a guessed station with the same color as the line it belongs to.
+  // Because of how things are structured there is no good way to do it right now
+  // Create a map that holds all the colors for each station which should make it
+  // a bit easier and faster to look it up.
+  private loadStationColors(): void {
+    this._game.lines.forEach((line) => {
+      const color = line.color;
+
+      line.stations.forEach((station) => {
+        const colors = this._stationColorMap.get(station.name) || [];
+        colors.push(color);
+
+        this._stationColorMap.set(station.name, colors);
+      });
+    });
+  }
+
+  // Only get the first color if the station belongs to multiple lines
+  public getStationColor(stationName: string): string | null {
+    const colors = this._stationColorMap.get(stationName);
+    if (colors) {
+      return colors[0];
+    }
+
+    return null;
+  }
+
+  public getStationColors(stationName: string): string[] | null {
+    return this._stationColorMap.get(stationName) || null;
   }
 
   private async renderLines(): Promise<void> {
@@ -131,13 +166,23 @@ export class MapManager {
       type: "circle",
       source: "stations",
       paint: {
-        "circle-radius": 3,
-        "circle-color": "#ffffff",
-        "circle-stroke-width": 2,
+        "circle-radius": 4,
+        "circle-color": [
+          "case",
+          ["boolean", ["get", "guessed"], false],
+          ["get", "markedColor"], // Use markedColor color if guessed
+          "#ffffff", // Color if not guessed
+        ],
+        "circle-stroke-width": [
+          "case",
+          ["boolean", ["get", "guessed"], false],
+          2, // If guessed
+          1, // If not guessed
+        ],
         "circle-stroke-color": [
           "case",
           ["boolean", ["get", "guessed"], false],
-          "green", // Color if guessed
+          "#ffffff", // Color if guessed
           "#000000", // Color if not guessed
         ],
       },
