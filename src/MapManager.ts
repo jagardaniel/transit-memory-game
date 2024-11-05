@@ -1,27 +1,21 @@
-import maplibregl from "maplibre-gl";
+import { Map as MapLibreMap, LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { Game } from "./models/Game";
-import { loadGeoJSON } from "./helpers/geoJSONLoader";
+import { Line } from "./models/Line";
 
 export class MapManager {
-  private _map: maplibregl.Map;
-  private _game: Game;
-  private _initialCoordinates: [number, number];
-  private _initialZoomLevel: number;
-  private _stationsGeoJSON: GeoJSON.FeatureCollection = {
-    type: "FeatureCollection",
-    features: [],
-  };
-  private _stationColorMap = new Map<string, string[]>();
+  private map: MapLibreMap;
+  private game: Game;
+  private initialCoordinates: LngLatLike;
+  private initialZoom: number;
 
-  constructor(game: Game, initialCoordinates: [number, number], initialZoomLevel: number) {
-    this._game = game;
+  constructor(game: Game, initialCoordinates: LngLatLike, initialZoom: number) {
+    this.game = game;
+    this.initialCoordinates = initialCoordinates;
+    this.initialZoom = initialZoom;
 
-    this._initialCoordinates = initialCoordinates;
-    this._initialZoomLevel = initialZoomLevel;
-
-    this._map = new maplibregl.Map({
+    this.map = new MapLibreMap({
       container: "map",
       style: {
         version: 8,
@@ -43,223 +37,170 @@ export class MapManager {
           },
         ],
       },
-      center: this._initialCoordinates,
-      zoom: this._initialZoomLevel,
+      center: this.initialCoordinates,
+      zoom: this.initialZoom,
       minZoom: 10,
       maxZoom: 15,
     });
 
-    this.loadStationColors();
-  }
+    // Disable map rotation
+    this.map.dragRotate.disable();
+    this.map.keyboard.disable();
+    this.map.touchZoomRotate.disableRotation();
 
-  private async onMapLoad(completedGuesses: string[] = []): Promise<void> {
-    this._map.on("load", async () => {
-      this.initializeStationsGeoJSON(completedGuesses);
-
-      // I'm going to be completely honest, I don't know why renderLines need to be async and how it works
-      // But renderLines should always be run first
-      await this.renderLines();
-
-      this.renderStationMarkers();
-      this.renderStationLabels();
+    this.map.on("load", async () => {
+      await this.renderGeoJSONData();
     });
   }
 
-  public initializeMap(completedGuesses: string[] = []): void {
-    this.onMapLoad(completedGuesses);
-  }
+  private async renderGeoJSONData(): Promise<void> {
+    const lines = this.game.getLines();
 
-  private initializeStationsGeoJSON(completedGuesses: string[]): void {
-    // We will need to modify the GeoJSON station data to mark a station (feature) as guessed
-    // I think it will be easier to have the data as an instance variable
-    // completedGuesses can be sent in to mark a station as guessed on the initial load
-    const features: GeoJSON.Feature[] = [];
+    for (const line of lines) {
+      const geoJSONData = line.getGeoJSONData();
+      const baseName = `${line.getShortName()}-${line.getType()}`;
 
-    this._game.getStations().forEach((station) => {
-      const { x, y } = station.coordinates;
-      features.push({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [y, x],
-        },
-        properties: {
-          name: station.name,
-          guessed: completedGuesses.includes(station.name),
-          markedColor: this.getStationColor(station.name),
-        },
-      });
-    });
-
-    this._stationsGeoJSON.features = features;
-  }
-
-  // We want to mark a guessed station with the same color as the line it belongs to.
-  // Because of how things are structured there is no good way to do it right now
-  // Create a map that holds all the colors for each station which should make it
-  // a bit easier and faster to look it up.
-  private loadStationColors(): void {
-    this._game.lines.forEach((line) => {
-      const color = line.color;
-
-      line.stations.forEach((station) => {
-        const colors = this._stationColorMap.get(station.name) || [];
-        colors.push(color);
-
-        this._stationColorMap.set(station.name, colors);
-      });
-    });
-  }
-
-  // Only get the first color if the station belongs to multiple lines
-  public getStationColor(stationName: string): string | null {
-    const colors = this._stationColorMap.get(stationName);
-    if (colors) {
-      return colors[0];
-    }
-
-    return null;
-  }
-
-  public getStationColors(stationName: string): string[] | null {
-    return this._stationColorMap.get(stationName) || null;
-  }
-
-  private async renderLines(): Promise<void> {
-    for (const line of this._game.lines) {
-      try {
-        const geoJSONData = await loadGeoJSON(line.geoJSONPath);
-
-        this._map.addSource(line.name, {
+      if (geoJSONData) {
+        // Add source for each line
+        this.map.addSource(baseName, {
           type: "geojson",
           data: geoJSONData,
         });
 
-        this._map.addLayer({
-          id: line.name,
+        // Draw lines
+        this.map.addLayer({
+          id: baseName + "-lines",
           type: "line",
-          source: line.name,
+          source: baseName,
           layout: {
             "line-join": "round",
             "line-cap": "round",
           },
           paint: {
-            "line-color": line.color,
+            "line-color": line.getColor(),
             "line-width": 3,
             "line-opacity": 1,
           },
         });
-      } catch (error) {
-        console.error(`Error loading GeoJSON for line "${line.name}":`, error);
+
+        // Add markers for each station
+        this.map.addLayer({
+          id: baseName + "-markers",
+          type: "circle",
+          source: baseName,
+          paint: {
+            "circle-radius": 4,
+            "circle-color": [
+              "case",
+              ["boolean", ["get", "guessed"], false],
+              line.getColor(), // Color if guessed
+              "#ffffff", // Color if not guessed
+            ],
+            "circle-stroke-color": [
+              "case",
+              ["boolean", ["get", "guessed"], false],
+              "#ffffff", // Color if guessed
+              "#000000", // Color if not guessed
+            ],
+            "circle-stroke-width": [
+              "case",
+              ["boolean", ["get", "guessed"], false],
+              2, // If guessed
+              1, // If not guessed
+            ],
+          },
+          filter: ["==", "$type", "Point"],
+        });
+
+        // Add text labels for each station. Only displayed if "guessed" property is set to true
+        this.map.addLayer({
+          id: baseName + "-labels",
+          type: "symbol",
+          source: baseName,
+          layout: {
+            "text-field": ["get", "name"],
+            "text-size": 11,
+            "text-anchor": "bottom",
+            "text-offset": [0, -0.5],
+          },
+          paint: {
+            "text-color": "#000000",
+            "text-halo-color": "white",
+            "text-halo-width": 2,
+            "text-halo-blur": 1,
+          },
+          filter: ["==", ["get", "guessed"], true],
+          minzoom: 11,
+        });
+      } else {
+        console.error(`GeoJSON data for line "${line.getName()}" is undefined.`);
       }
     }
   }
 
-  private renderStationMarkers(): void {
-    this._map.addSource("stations", {
-      type: "geojson",
-      data: this._stationsGeoJSON,
-    });
+  public findStationCoordinates(stationName: string): [number, number] | undefined {
+    const lines = this.game.getLines();
 
-    this._map.addLayer({
-      id: "station-markers",
-      type: "circle",
-      source: "stations",
-      paint: {
-        "circle-radius": 4,
-        "circle-color": [
-          "case",
-          ["boolean", ["get", "guessed"], false],
-          ["get", "markedColor"], // Use markedColor color if guessed
-          "#ffffff", // Color if not guessed
-        ],
-        "circle-stroke-width": [
-          "case",
-          ["boolean", ["get", "guessed"], false],
-          2, // If guessed
-          1, // If not guessed
-        ],
-        "circle-stroke-color": [
-          "case",
-          ["boolean", ["get", "guessed"], false],
-          "#ffffff", // Color if guessed
-          "#000000", // Color if not guessed
-        ],
-      },
-    });
-  }
-
-  private renderStationLabels(): void {
-    this._map.addLayer({
-      id: "station-labels",
-      type: "symbol",
-      source: "stations",
-      layout: {
-        "text-field": ["get", "name"],
-        "text-size": 13,
-        "text-anchor": "bottom",
-        "text-offset": [0, -0.5],
-      },
-      paint: {
-        "text-color": "#000000",
-        "text-halo-color": "white",
-        "text-halo-width": 2,
-        "text-halo-blur": 1,
-      },
-      filter: ["==", ["get", "guessed"], true], // Only show if station is guessed
-      minzoom: 11,
-    });
-  }
-
-  public markStationAsGuessed(stationName: string): void {
-    // I don't think there is an easier way to modify data with a GeoJSON source
-    // Markers seems to be an option for the station marker and labels but I was unable
-    // to place them at the correct layer (zIndex). ChatGPTs suggestion:
-    const featureIndex = this._stationsGeoJSON.features.findIndex((feature) => {
-      return feature.properties && feature.properties.name === stationName;
-    });
-
-    if (featureIndex !== -1) {
-      if (this._stationsGeoJSON.features[featureIndex].properties) {
-        this._stationsGeoJSON.features[featureIndex].properties.guessed = true;
-
-        const source = this._map.getSource("stations");
-        if (source) {
-          (source as maplibregl.GeoJSONSource).setData(this._stationsGeoJSON);
-        }
+    // Same station (with slightly different coordinates) can exist on multiple lines.
+    // They are close enough so just get the first one we can find.
+    for (const line of lines) {
+      const coordinates = line.getStationCoordinates(stationName);
+      if (coordinates) {
+        return coordinates;
       }
-    } else {
-      console.warn(`Station "${stationName}" not found in GeoJSON data.`);
     }
+
+    console.error(`Station "${stationName}" not found in any line.`);
+    return undefined;
+  }
+
+  public markStationsAsGuessed(stations: string | string[]): void {
+    const stationArray = Array.isArray(stations) ? stations : [stations];
+
+    stationArray.forEach((stationName) => {
+      const lines = this.game.getLines();
+
+      for (const line of lines) {
+        line.markStationAsGuessed(stationName);
+        this.updateGeoJSON(line);
+      }
+    });
   }
 
   public resetStations(): void {
-    this._stationsGeoJSON.features.forEach((feature) => {
-      if (feature.properties) {
-        feature.properties.guessed = false;
-      }
-    });
+    const lines = this.game.getLines();
 
-    const source = this._map.getSource("stations");
-    if (source) {
-      (source as maplibregl.GeoJSONSource).setData(this._stationsGeoJSON);
+    for (const line of lines) {
+      line.resetGuessedStations();
+      this.updateGeoJSON(line);
+    }
+  }
+
+  private updateGeoJSON(line: Line): void {
+    const geoJSONData = line.getGeoJSONData();
+    if (geoJSONData) {
+      const baseName = `${line.getShortName()}-${line.getType()}`;
+      const source = this.map.getSource(baseName);
+      if (source) {
+        (source as maplibregl.GeoJSONSource).setData(geoJSONData);
+      }
     }
   }
 
   public flyToStation(stationName: string): void {
-    const station = this._game.getStation(stationName);
-    if (station) {
-      this._map.flyTo({
-        center: [station.coordinates.y, station.coordinates.x],
+    const coordinates = this.findStationCoordinates(stationName);
+    if (coordinates) {
+      this.map.flyTo({
+        center: [coordinates[0], coordinates[1]],
         zoom: 14,
       });
     }
   }
 
   public resetZoom(): void {
-    this._map.flyTo({
-      center: this._initialCoordinates,
-      zoom: this._initialZoomLevel,
+    this.map.flyTo({
+      center: this.initialCoordinates,
+      zoom: this.initialZoom,
     });
   }
 }

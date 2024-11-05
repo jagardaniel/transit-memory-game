@@ -1,34 +1,17 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-
-* {
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-body {
-  font-family: "Roboto", sans-serif;
-}
-
-input {
-  font-family: "Roboto", sans-serif;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-}
-
-#stats {
-  width: 15%;
-  border-right: 1px solid #d3d3d3;
-  padding: 15px;
-  overflow: auto;
+input:focus {
+  outline: none;
 }
 
 #map {
-  width: 85%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 .search-container {
@@ -41,7 +24,7 @@ input {
 
 .station-input {
   width: 350px;
-  height: 50px;
+  height: 40px;
   padding-left: 43px;
   font-size: 20px;
   border: 2px solid rgba(85, 85, 85, 0.4);
@@ -49,55 +32,12 @@ input {
   color: #363636;
 
   /* Icon inside text form */
-  background-image: url("/icons/train.svg");
+  background-image: url("./icons/train.svg");
   background-repeat: no-repeat;
   background-position: 10px center;
 }
 
-/* FIX */
-h3 {
-  font-weight: normal;
-  margin-bottom: 5px;
-}
-
-p {
-  color: #70757a;
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-hr {
-  color: #cccccc;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  opacity: 20%;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-ul li:hover {
-  background-color: #eeeeee;
-}
-
-li {
-  padding: 1px;
-  margin-bottom: 2px;
-  cursor: pointer;
-}
-
-input::placeholder {
-  color: #000000;
-  opacity: 30%;
-}
-
-input:focus {
-  outline: none;
-}
-
+/* Animation and styling for text input */
 .shake {
   animation: shake 0.2s ease-in-out 0s 2;
 }
@@ -121,24 +61,4 @@ input:focus {
 
 .duplicate-guess {
   border: 2px solid #e5d700;
-}
-
-#guess-list li {
-  display: flex;
-  align-items: center;
-  padding: 1px 0;
-}
-
-/* Container for the color lines next to each station */
-.color-indicator-container {
-  display: inline-flex;
-  margin-right: 5px;
-  align-items: center;
-}
-
-/* Individual color line styling */
-.color-line {
-  width: 4px; /* Width of each line */
-  height: 25px; /* Height of each line */
-  margin-right: 3px;
 }

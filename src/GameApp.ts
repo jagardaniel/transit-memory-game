@@ -3,35 +3,37 @@ import { MapManager } from "./MapManager";
 import { Game } from "./models/Game";
 
 export class GameApp {
-  private _game: Game;
-  private _mapManager: MapManager;
-  private _stationInput: HTMLInputElement | null;
+  private game: Game;
+  private map: MapManager;
+  private stationInput: HTMLInputElement | null;
 
-  constructor(game: Game, mapManager: MapManager) {
-    this._game = game;
-    this._mapManager = mapManager;
-    this._stationInput = document.querySelector<HTMLInputElement>("#station-input");
+  constructor(game: Game, map: MapManager) {
+    this.game = game;
+    this.map = map;
+    this.stationInput = document.querySelector<HTMLInputElement>("#station-input");
 
     this.initializeGame();
     this.setupEventListeners();
   }
 
-  private initializeGame(): void {
+  private async initializeGame(): Promise<void> {
     // Load completed guesses from local storage
     const savedGuesses = loadCompletedGuesses();
 
-    this._mapManager.initializeMap(savedGuesses);
-    this._game.setInitialGuesses(savedGuesses);
+    // Set them as marked
+    this.map.markStationsAsGuessed(savedGuesses);
+
+    this.game.setInitialGuesses(savedGuesses);
     this.updateUI();
 
-    if (this._stationInput) {
-      this._stationInput.focus();
+    if (this.stationInput) {
+      this.stationInput.focus();
     }
   }
 
   private setupEventListeners(): void {
-    if (this._stationInput) {
-      this._stationInput.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (this.stationInput) {
+      this.stationInput.addEventListener("keydown", (event: KeyboardEvent) => {
         if (event.key === "Enter") {
           event.preventDefault();
           this.handleGuess();
@@ -39,127 +41,69 @@ export class GameApp {
       });
     }
 
-    const guessList = document.getElementById("guess-list");
-    if (guessList) {
-      guessList.addEventListener("click", (event) => this.handleGuessListClick(event));
-    }
-
     const resetButton = document.querySelector<HTMLButtonElement>("#reset-game");
     if (resetButton) {
-      resetButton.addEventListener("click", () => this.resetGame());
+      resetButton.addEventListener("click", () => this.handleReset());
     }
   }
 
   private handleGuess(): void {
-    if (this._stationInput) {
-      const stationName = this._stationInput.value.trim();
+    if (this.stationInput) {
+      const stationName = this.stationInput.value.trim();
 
-      if (this._game.makeGuess(stationName)) {
-        const station = this._game.getStation(stationName);
+      if (this.game.makeGuess(stationName)) {
+        const station = this.game.getStation(stationName);
         if (!station) return;
 
-        this._stationInput.value = "";
+        this.stationInput.value = "";
 
         // Save to local storage
-        saveCompletedGuesses(this._game.completedGuesses);
+        saveCompletedGuesses(this.game.getCompletedGuesses());
 
         this.updateUI();
-        this._mapManager.markStationAsGuessed(station.name);
-        this._mapManager.flyToStation(stationName);
+        this.map.markStationsAsGuessed(station);
+        this.map.flyToStation(station);
       } else {
         let styling = ["shake"];
 
-        if (this._game.completedGuesses.some((x) => x.toLocaleLowerCase() === stationName.toLocaleLowerCase())) {
+        if (this.game.getCompletedGuesses().some((x) => x.toLocaleLowerCase() === stationName.toLocaleLowerCase())) {
           styling.push("duplicate-guess");
         } else {
           styling.push("wrong-guess");
         }
 
-        this._stationInput.classList.add(...styling);
+        this.stationInput.classList.add(...styling);
 
         setTimeout(() => {
-          if (this._stationInput) {
-            this._stationInput.classList.remove(...styling);
+          if (this.stationInput) {
+            this.stationInput.classList.remove(...styling);
           }
         }, 500);
       }
     }
   }
 
-  private handleGuessListClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    this._mapManager.flyToStation(target.innerText);
+  private handleReset(): void {
+    const reset = confirm("Är du säker på att du vill börja om? Detta återställer alla dina nuvarande gissningar.");
+    if (reset) this.resetGame();
   }
 
   private resetGame(): void {
     // Clear local storage
     clearCompletedGuesses();
 
-    this._game.reset();
+    this.game.reset();
     this.updateUI();
 
-    if (this._stationInput) {
-      this._stationInput.value = "";
+    if (this.stationInput) {
+      this.stationInput.value = "";
     }
 
-    this._mapManager.resetStations();
-    this._mapManager.resetZoom();
+    this.map.resetStations();
+    this.map.resetZoom();
   }
 
   private updateUI(): void {
-    this.updateLineOverview();
-    this.updateGuessList();
-  }
-
-  private updateLineOverview(): void {
-    const lineStats = document.getElementById("line-stats") as HTMLParagraphElement;
-    if (!lineStats) return;
-
-    lineStats.innerHTML = "";
-
-    this._game.getAllLineStats().forEach((line) => {
-      const currentGuesses = line.completedGuesses;
-      const totalStations = line.totalStations;
-      const percentageComplete = Math.round((currentGuesses / totalStations) * 100);
-
-      const listItem = document.createElement("li");
-      listItem.textContent = `${line.lineName} - ${currentGuesses}/${totalStations} (${percentageComplete}%)`;
-      lineStats.appendChild(listItem);
-    });
-  }
-
-  private updateGuessList(): void {
-    const guessList = document.getElementById("guess-list") as HTMLUListElement;
-    const guessListTotal = document.getElementById("guess-list-total") as HTMLParagraphElement;
-    if (!guessList || !guessListTotal) return;
-
-    guessList.innerHTML = "";
-    guessListTotal.innerHTML = "";
-
-    const currentGuesses = this._game.completedGuesses.length;
-    const totalStations = this._game.getStations().length;
-    const percentageComplete = Math.round((currentGuesses / totalStations) * 100);
-
-    guessListTotal.innerHTML = `${currentGuesses} av ${totalStations} stationer upptäckta (${percentageComplete}%)`;
-
-    [...this._game.completedGuesses].reverse().forEach((station) => {
-      const listItem = document.createElement("li");
-
-      const colorIndicatorContainer = document.createElement("div");
-      colorIndicatorContainer.className = "color-indicator-container";
-
-      const stationColors = this._mapManager.getStationColors(station);
-      stationColors?.forEach((color) => {
-        const colorLine = document.createElement("span");
-        colorLine.className = "color-line";
-        colorLine.style.backgroundColor = color;
-        colorIndicatorContainer.appendChild(colorLine);
-      });
-
-      listItem.appendChild(colorIndicatorContainer);
-      listItem.appendChild(document.createTextNode(station));
-
-      guessList.appendChild(listItem);
-    });
+    console.log("Updating UI...");
   }
 }

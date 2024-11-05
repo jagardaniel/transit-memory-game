@@ -1,58 +1,55 @@
-import { Station } from "./Station";
 import { Line } from "./Line";
-import { initializeLines } from "../helpers/initializeLines";
-import { LineData, LineStats } from "../types";
 
 export class Game {
-  private _lines: Line[];
-  private _completedGuesses: Set<string>;
+  private lines: Line[];
+  private completedGuesses: Set<string>;
 
-  constructor(lineData: LineData[]) {
-    this._lines = initializeLines(lineData);
-    this._completedGuesses = new Set();
+  constructor(lines: Line[]) {
+    this.lines = lines;
+    this.completedGuesses = new Set();
   }
 
   public setInitialGuesses(guesses: string[]): void {
-    this._completedGuesses = new Set(guesses);
+    const stations = new Set(this.getStations());
+    this.completedGuesses = new Set(guesses.filter((guess) => stations.has(guess)));
   }
 
   public makeGuess(stationName: string): boolean {
-    let guess = false;
+    const station = this.getStation(stationName);
 
-    for (const line of this._lines) {
-      const station = line.stations.find((station) => station.name.toLowerCase() === stationName.toLowerCase());
-      if (station) {
-        if (!this._completedGuesses.has(station.name)) {
-          this._completedGuesses.add(station.name);
-          guess = true;
-        }
-      }
+    if (station && !this.completedGuesses.has(station)) {
+      this.completedGuesses.add(station);
+      return true;
     }
 
-    return guess;
+    return false;
+  }
+
+  public getCompletedGuesses(): string[] {
+    return Array.from(this.completedGuesses);
   }
 
   public getLine(lineName: string): Line | null {
-    const line = this._lines.find((line) => line.name.toLowerCase() === lineName.toLowerCase());
+    const line = this.lines.find((line) => line.getName().toLowerCase() === lineName.toLowerCase());
     return line ?? null;
   }
 
-  public getStation(stationName: string): Station | null {
-    for (const line of this._lines) {
-      const station = line.stations.find((station) => station.name.toLowerCase() === stationName.toLowerCase());
+  public getStation(stationName: string): string | null {
+    for (const line of this.lines) {
+      const station = line.getStations().find((station) => station.toLowerCase() === stationName.toLowerCase());
       if (station) return station;
     }
     return null;
   }
 
-  public getStations(): Station[] {
+  public getStations(): string[] {
     const uniqueStations = new Set<string>();
-    const allStations: Station[] = [];
+    const allStations: string[] = [];
 
-    for (const line of this._lines) {
-      for (const station of line.stations) {
-        if (!uniqueStations.has(station.name)) {
-          uniqueStations.add(station.name);
+    for (const line of this.lines) {
+      for (const station of line.getStations()) {
+        if (!uniqueStations.has(station)) {
+          uniqueStations.add(station);
           allStations.push(station);
         }
       }
@@ -61,27 +58,11 @@ export class Game {
     return allStations;
   }
 
-  public getAllLineStats(): LineStats[] {
-    return this._lines.map((line) => {
-      const totalStations = line.stations.length;
-      const completedGuesses = line.stations.filter((station) => this._completedGuesses.has(station.name)).length;
-      return {
-        lineName: line.name,
-        completedGuesses,
-        totalStations,
-      };
-    });
+  public getLines(): Line[] {
+    return this.lines;
   }
 
   public reset(): void {
-    this._completedGuesses.clear();
-  }
-
-  get lines(): Line[] {
-    return this._lines;
-  }
-
-  get completedGuesses(): string[] {
-    return Array.from(this._completedGuesses);
+    this.completedGuesses.clear();
   }
 }
