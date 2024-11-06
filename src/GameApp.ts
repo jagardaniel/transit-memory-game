@@ -1,6 +1,6 @@
 import { clearCompletedGuesses, loadCompletedGuesses, saveCompletedGuesses } from "./helpers/localStorage";
 import { MapManager } from "./MapManager";
-import { Game } from "./models/Game";
+import { Game, GuessResult } from "./models/Game";
 
 export class GameApp {
   private game: Game;
@@ -51,24 +51,27 @@ export class GameApp {
     if (this.stationInput) {
       const stationName = this.stationInput.value.trim();
 
-      if (this.game.makeGuess(stationName)) {
-        const station = this.game.getStation(stationName);
-        if (!station) return;
+      const result = this.game.makeGuess(stationName);
 
+      if (result === GuessResult.Success) {
         this.stationInput.value = "";
 
         // Save to local storage
         saveCompletedGuesses(this.game.getCompletedGuesses());
 
         this.updateUI();
-        this.map.markStationsAsGuessed(station);
-        this.map.flyToStation(station);
+
+        const station = this.game.getStation(stationName);
+        if (station) {
+          this.map.markStationsAsGuessed(station);
+          this.map.flyToStation(station);
+        }
       } else {
         let styling = ["shake"];
 
-        if (this.game.getCompletedGuesses().some((x) => x.toLocaleLowerCase() === stationName.toLocaleLowerCase())) {
+        if (result === GuessResult.Duplicate) {
           styling.push("duplicate-guess");
-        } else {
+        } else if (result === GuessResult.Invalid) {
           styling.push("wrong-guess");
         }
 
