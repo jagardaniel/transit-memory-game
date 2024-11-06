@@ -50,8 +50,12 @@ def process_geojson(file_path):
 
         # Remove all properties for LineString type
         elif geometry_type == "LineString":
-            feature["properties"] = {}
+            # Skip LineString that has railway set to platform
+            railway = feature["properties"].get("railway", None)
+            if railway == "platform":
+                continue
 
+            feature["properties"] = {}
             new_features.append(feature)
 
     data["features"] = new_features

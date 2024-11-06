@@ -2,7 +2,7 @@
   "type": "FeatureCollection",
   "generator": "overpass-turbo",
   "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
-  "timestamp": "2024-11-06T16:12:56Z",
+  "timestamp": "2024-11-06T20:28:15Z",
   "features": [
     {
       "type": "Feature",
@@ -179,21 +179,6 @@
         ]
       },
       "id": "way/26447432"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [17.9923316, 59.3248992],
-          [17.9924681, 59.3248829],
-          [17.9925521, 59.3248687],
-          [17.9935344, 59.3246735],
-          [17.9937841, 59.3246278]
-        ]
-      },
-      "id": "way/37832625"
     },
     {
       "type": "Feature",
@@ -890,45 +875,6 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [18.1080911, 59.3063504],
-          [18.1094774, 59.3062305]
-        ]
-      },
-      "id": "way/238976321"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [18.103085, 59.3024571],
-          [18.103459, 59.3027373],
-          [18.1036917, 59.3029135],
-          [18.1039571, 59.3031099]
-        ]
-      },
-      "id": "way/238976328"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [18.0885802, 59.3028689],
-          [18.0882554, 59.3027887],
-          [18.0873945, 59.3025762]
-        ]
-      },
-      "id": "way/238976334"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
           [17.9747928, 59.3400281],
           [17.9742987, 59.3403042],
           [17.9737831, 59.3405826],
@@ -948,21 +894,6 @@
         ]
       },
       "id": "way/243874198"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [18.0294056, 59.2995016],
-          [18.0294692, 59.2994615],
-          [18.0298349, 59.2992198],
-          [18.030023, 59.2990964],
-          [18.0300965, 59.2990481]
-        ]
-      },
-      "id": "way/250815038"
     },
     {
       "type": "Feature",
@@ -1099,19 +1030,6 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [17.9624077, 59.3604696],
-          [17.9630305, 59.3606572],
-          [17.9636701, 59.3608498]
-        ]
-      },
-      "id": "way/366925550"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
           [18.0792129, 59.3006187],
           [18.0791822, 59.3006516],
           [18.0791494, 59.300687],
@@ -1216,32 +1134,6 @@
         ]
       },
       "id": "way/448203358"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [18.0391427, 59.2963945],
-          [18.0392759, 59.2963948],
-          [18.040284, 59.2963938]
-        ]
-      },
-      "id": "way/478899921"
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [17.9612423, 59.3556979],
-          [17.9616112, 59.3563278],
-          [17.9616339, 59.3563665]
-        ]
-      },
-      "id": "way/482052274"
     },
     {
       "type": "Feature",
