@@ -2,6 +2,7 @@ import { Feature, FeatureCollection, Point } from "geojson";
 
 export enum LineType {
   Metro = "metro",
+  LightRail = "light-rail",
 }
 
 export class Line {

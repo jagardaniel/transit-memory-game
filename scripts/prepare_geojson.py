@@ -12,7 +12,8 @@ from pathlib import Path
 OUT_DIR = "out/"
 
 name_replacements = {
-    "Sankt Eriksplan": "S:t Eriksplan"
+    "Sankt Eriksplan": "S:t Eriksplan",
+    "Torsvik/Millesgården": "Torsvik",
 }
 
 def process_geojson(file_path):

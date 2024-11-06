@@ -43,3 +43,15 @@ out body;
 out body;
 
 -----------------------------------------------------
+
+
+- Lidingöbanan
+-- Lidingöbanan 21: Ropsten - Gåshaga (251504)
+
+
+[out:json][timeout:25];
+(
+  rel(251504);
+);
+(._;>;);
+out body;
