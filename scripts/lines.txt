@@ -1,8 +1,8 @@
 
-Metro
-- Red line
--- 13: Ropsten - Norsborg (6286474)
--- 14: Mörby centrum - Fruängen (6286476)
+Add a new line
+
+1. https://overpass-turbo.eu/
+2. Run query (for red line metro as example):
 
 [out:json][timeout:25];
 (
@@ -12,46 +12,38 @@ Metro
 (._;>;);
 out body;
 
-- Blue line
+3. Export data as GeoJSON
+4. Save to src/scripts/in
+5. scripts$ python3 prepare_geojson.py in/<name>.geojson
+6. Copy out/line.geojson to public/geojson/<type>/<name>.geojson
+7. Add the line to src/LineSetup.ts
+
+--------------------------------------------------------------------
+
+Relations used:
+
+Metro red:
+-- 13: Ropsten - Norsborg (6286474)
+-- 14: Mörby centrum - Fruängen (6286476)
+
+Metro blue:
 -- 10: Hjulsta - Kungsträdgården (6286469)
 -- 11: Akalla - Kungsträdgården (6286471)
 
-
-[out:json][timeout:25];
-(
-  rel(6286469);
-  rel(6286471);
-);
-(._;>;);
-out body;
-
-
-- Green line
+Metro green:
 -- 17: Hässelby strand - Skarpnäck (6286478)
 -- 18: Hässelby strand - Farsta strand (6286479)
 -- 19: Hässelby strand - Hagsätra (6286482)
 
-
-
-[out:json][timeout:25];
-(
-  rel(6286478);
-  rel(6286479);
-  rel(6286482);
-);
-(._;>;);
-out body;
-
------------------------------------------------------
-
-
-- Lidingöbanan
+Lidingöbanan:
 -- Lidingöbanan 21: Ropsten - Gåshaga (251504)
 
+Spårväg City:
+-- Spårvagn 7: Waldemarsudde - T-Centralen (2860816)
 
-[out:json][timeout:25];
-(
-  rel(251504);
-);
-(._;>;);
-out body;
+Nockebybanan:
+-- Nockebybanan 12: Alvik => Nockeby (3174524)
+
+Tvärbanan (still includes platforms for some reason, fix later):
+-- Tvärbanan 30: Sickla - Solna station (5989911)
+-- Tvärbanan 31: Alviks strand – Bromma flygplats (11997851)
