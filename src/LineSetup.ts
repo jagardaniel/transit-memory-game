@@ -20,10 +20,21 @@ export async function loadMetro(): Promise<Line[]> {
   return [redLine, greenLine, blueLine];
 }
 
+// Pendeltåg
+const pendeltagCorrections = {
+  "uppsala centrum": "Uppsala C",
+  "arlanda central": "Arlanda C",
+};
+
+export async function loadPendeltag(): Promise<Line> {
+  const pendeltag = await Line.create("Pendeltåg", "pendeltag", "#f266a6", LineType.CommuterRail, pendeltagCorrections);
+  return pendeltag;
+}
+
 // Lidingöbanan
 export async function loadLidingobanan(): Promise<Line> {
-  const lidingo = await Line.create("Lidingöbanan", "lidingobanan", "#b65f1f", LineType.Tram);
-  return lidingo;
+  const lidingobanan = await Line.create("Lidingöbanan", "lidingobanan", "#b65f1f", LineType.Tram);
+  return lidingobanan;
 }
 
 const sparvagCityCorrections = {
@@ -36,8 +47,8 @@ const sparvagCityCorrections = {
 
 // Spårväg City
 export async function loadSparvagCity(): Promise<Line> {
-  const lidingo = await Line.create("Spårväg City", "sparvagcity", "#747770", LineType.Tram, sparvagCityCorrections);
-  return lidingo;
+  const sparvagCity = await Line.create("Spårväg City", "sparvagcity", "#747770", LineType.Tram, sparvagCityCorrections);
+  return sparvagCity;
 }
 
 // Nockebybanan
@@ -51,8 +62,13 @@ export async function loadNockebybanan(): Promise<Line> {
 }
 
 // Tvärbanan
-// TODO: Tvärbanan still has platforms for some reason.
 export async function loadTvarbanan(): Promise<Line> {
-  const nockeby = await Line.create("Tvärbanan", "tvarbanan", "#e3861e", LineType.Tram);
-  return nockeby;
+  const tvarbanan = await Line.create("Tvärbanan", "tvarbanan", "#e3861e", LineType.Tram);
+  return tvarbanan;
+}
+
+// Roslagsbanan
+export async function loadRoslagsbanan(): Promise<Line> {
+  const roslagsbanan = await Line.create("Roslagsbanan", "roslagsbanan", "#a25ea6", LineType.LightRail);
+  return roslagsbanan;
 }

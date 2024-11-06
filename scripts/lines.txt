@@ -22,15 +22,15 @@ out body;
 
 Relations used:
 
-Metro red:
+Tunnelbana - Röda linjen:
 -- 13: Ropsten - Norsborg (6286474)
 -- 14: Mörby centrum - Fruängen (6286476)
 
-Metro blue:
+Tunnelbana - Blå linjen:
 -- 10: Hjulsta - Kungsträdgården (6286469)
 -- 11: Akalla - Kungsträdgården (6286471)
 
-Metro green:
+Tunnelbana - Gröna linjen:
 -- 17: Hässelby strand - Skarpnäck (6286478)
 -- 18: Hässelby strand - Farsta strand (6286479)
 -- 19: Hässelby strand - Hagsätra (6286482)
@@ -44,6 +44,23 @@ Spårväg City:
 Nockebybanan:
 -- Nockebybanan 12: Alvik => Nockeby (3174524)
 
-Tvärbanan (still includes platforms for some reason, fix later):
+Tvärbanan:
 -- Tvärbanan 30: Sickla - Solna station (5989911)
 -- Tvärbanan 31: Alviks strand – Bromma flygplats (11997851)
+
+Roslagsbanan
+-- Lokalbana 27: Stockholms östra - Kårsta (241405)
+-- Lokalbana 28: Stockholms östra - Österskär (241406)
+-- Lokalbana 29: Stockholms östra - Näsbypark (241407)
+
+Pendeltåg:
+-- Tåg 40: Södertälje centrum - Uppsala (2836162)
+-- Tåg 41: Södertälje centrum - Märsta (3304343)
+-- Tåg 42X: Nynäshamn - Märsta (8506176)
+-- Tåg 43: Nynäshamn - Bålsta (3303657)
+-- Tåg 43X: Nynäshamn - Kallhäll (8518403)
+-- Tåg 44: Tåg 44: Tumba - Kallhäll (8518400)
+-- Tåg 48: Tåg 48: Södertälje centrum - Gnesta (3304345)
+
+Salstjöbanan
+-- Closed, under construction.

@@ -11,9 +11,11 @@ from pathlib import Path
 
 OUT_DIR = "out/"
 
+# Replace names to match SL rail network map
 name_replacements = {
     "Sankt Eriksplan": "S:t Eriksplan",
     "Torsvik/Millesgården": "Torsvik",
+    "Arlanda central": "Arlanda C",
 }
 
 def process_geojson(file_path):
