@@ -1,0 +1,45 @@
+
+Metro
+- Red line
+-- 13: Ropsten - Norsborg (6286474)
+-- 14: Mörby centrum - Fruängen (6286476)
+
+[out:json][timeout:25];
+(
+  rel(6286474);
+  rel(6286476);
+);
+(._;>;);
+out body;
+
+- Blue line
+-- 10: Hjulsta - Kungsträdgården (6286469)
+-- 11: Akalla - Kungsträdgården (6286471)
+
+
+[out:json][timeout:25];
+(
+  rel(6286469);
+  rel(6286471);
+);
+(._;>;);
+out body;
+
+
+- Green line
+-- 17: Hässelby strand - Skarpnäck (6286478)
+-- 18: Hässelby strand - Farsta strand (6286479)
+-- 19: Hässelby strand - Hagsätra (6286482)
+
+
+
+[out:json][timeout:25];
+(
+  rel(6286478);
+  rel(6286479);
+  rel(6286482);
+);
+(._;>;);
+out body;
+
+-----------------------------------------------------

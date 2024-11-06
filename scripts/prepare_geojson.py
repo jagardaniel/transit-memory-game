@@ -32,7 +32,7 @@ def process_geojson(file_path):
         geometry_type = feature["geometry"]["type"]
 
         # If the type is a Point, remove all properties except the name.
-        # Also add a property so we can mark a "station" (Point) as guessed.
+        # Also add a property so we can mark it as guessed.
         if geometry_type == "Point":
             name = feature["properties"].get("name", None)
 
@@ -47,8 +47,8 @@ def process_geojson(file_path):
                 }
                 new_features.append(feature)
 
-        # Remove all properties for MultiLineString type
-        elif geometry_type == "MultiLineString":
+        # Remove all properties for LineString type
+        elif geometry_type == "LineString":
             feature["properties"] = {}
 
             new_features.append(feature)

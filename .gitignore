@@ -25,3 +25,4 @@ dist-ssr
 
 # Project specific
 scripts/out/
+scripts/in/
