@@ -2,11 +2,13 @@
   "type": "FeatureCollection",
   "generator": "overpass-turbo",
   "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
-  "timestamp": "2024-11-06T15:16:04Z",
+  "timestamp": "2024-11-07T20:45:15Z",
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -372,7 +374,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -405,7 +409,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -417,7 +423,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -444,7 +452,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -468,7 +478,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -480,7 +492,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -547,7 +561,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -635,7 +651,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -653,7 +671,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -697,7 +717,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -709,7 +731,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -733,7 +757,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -761,7 +787,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -809,7 +837,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -823,7 +853,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -836,7 +868,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -855,7 +889,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -872,7 +908,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -896,7 +934,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -925,7 +965,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -942,7 +984,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -956,7 +1000,9 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {
+        "color": "#b65f1f"
+      },
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -971,7 +1017,8 @@
       "type": "Feature",
       "properties": {
         "name": "Ropsten",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -983,7 +1030,8 @@
       "type": "Feature",
       "properties": {
         "name": "AGA",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -995,7 +1043,8 @@
       "type": "Feature",
       "properties": {
         "name": "Baggeby",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1007,7 +1056,8 @@
       "type": "Feature",
       "properties": {
         "name": "Skärsätra",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1019,7 +1069,8 @@
       "type": "Feature",
       "properties": {
         "name": "Gåshaga brygga",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1031,7 +1082,8 @@
       "type": "Feature",
       "properties": {
         "name": "Käppala",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1043,7 +1095,8 @@
       "type": "Feature",
       "properties": {
         "name": "Högberga",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1055,7 +1108,8 @@
       "type": "Feature",
       "properties": {
         "name": "Larsberg",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1067,7 +1121,8 @@
       "type": "Feature",
       "properties": {
         "name": "Bodal",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1079,7 +1134,8 @@
       "type": "Feature",
       "properties": {
         "name": "Kottla",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1091,7 +1147,8 @@
       "type": "Feature",
       "properties": {
         "name": "Gåshaga",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1103,7 +1160,8 @@
       "type": "Feature",
       "properties": {
         "name": "Torsvik",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",
@@ -1115,7 +1173,8 @@
       "type": "Feature",
       "properties": {
         "name": "Brevik",
-        "guessed": false
+        "guessed": false,
+        "markedColor": "#b65f1f"
       },
       "geometry": {
         "type": "Point",

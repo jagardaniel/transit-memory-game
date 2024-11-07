@@ -77,13 +77,13 @@ export class MapManager {
             "line-cap": "round",
           },
           paint: {
-            "line-color": line.getColor(),
+            "line-color": ["get", "color"],
             "line-width": 3,
             "line-opacity": 1,
           },
+          filter: ["==", "$type", "LineString"],
         });
 
-        // Add markers for each station
         this.map.addLayer({
           id: baseName + "-markers",
           type: "circle",
@@ -93,7 +93,7 @@ export class MapManager {
             "circle-color": [
               "case",
               ["boolean", ["get", "guessed"], false],
-              line.getColor(), // Color if guessed
+              ["get", "markedColor"], // Color if guessed
               "#ffffff", // Color if not guessed
             ],
             "circle-stroke-color": [

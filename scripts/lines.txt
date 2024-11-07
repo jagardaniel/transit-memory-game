@@ -14,7 +14,8 @@ out body;
 
 3. Export data as GeoJSON
 4. Save to src/scripts/in
-5. scripts$ python3 prepare_geojson.py in/<name>.geojson
+5. scripts$ python3 prepare_geojson.py -f in/<name>.geojson -c "color"
+Example: python3 prepare_geojson.py -f in/blue.geojson -c "#007db8"
 6. Copy out/line.geojson to public/geojson/<type>/<name>.geojson
 7. Add the line to src/LineSetup.ts
 
@@ -22,38 +23,38 @@ out body;
 
 Relations used:
 
-Tunnelbana - Röda linjen:
+Tunnelbana - Röda linjen (#d71d24):
 -- 13: Ropsten - Norsborg (6286474)
 -- 14: Mörby centrum - Fruängen (6286476)
 
-Tunnelbana - Blå linjen:
+Tunnelbana - Blå linjen (#007db8):
 -- 10: Hjulsta - Kungsträdgården (6286469)
 -- 11: Akalla - Kungsträdgården (6286471)
 
-Tunnelbana - Gröna linjen:
+Tunnelbana - Gröna linjen (#148541):
 -- 17: Hässelby strand - Skarpnäck (6286478)
 -- 18: Hässelby strand - Farsta strand (6286479)
 -- 19: Hässelby strand - Hagsätra (6286482)
 
-Lidingöbanan:
+Lidingöbanan (#b65f1f):
 -- Lidingöbanan 21: Ropsten - Gåshaga (251504)
 
-Spårväg City:
+Spårväg City (#747770):
 -- Spårvagn 7: Waldemarsudde - T-Centralen (2860816)
 
-Nockebybanan:
+Nockebybanan (#627892):
 -- Nockebybanan 12: Alvik => Nockeby (3174524)
 
-Tvärbanan:
+Tvärbanan (#e3861e):
 -- Tvärbanan 30: Sickla - Solna station (5989911)
 -- Tvärbanan 31: Alviks strand – Bromma flygplats (11997851)
 
-Roslagsbanan
+Roslagsbanan (#a25ea6)
 -- Lokalbana 27: Stockholms östra - Kårsta (241405)
 -- Lokalbana 28: Stockholms östra - Österskär (241406)
 -- Lokalbana 29: Stockholms östra - Näsbypark (241407)
 
-Pendeltåg:
+Pendeltåg (#f266a6):
 -- Tåg 40: Södertälje centrum - Uppsala (2836162)
 -- Tåg 41: Södertälje centrum - Märsta (3304343)
 -- Tåg 42X: Nynäshamn - Märsta (8506176)

@@ -1,5 +1,28 @@
 import { Feature, FeatureCollection, Point } from "geojson";
 
+// Alternative spelling for stations.
+// Since the list will not be too long it is probably easier to just keep it
+// more centralized instead of specifying each alternatives for every line.
+// Should probably be placed in a different file though.
+const stationCorrections: Record<string, string> = {
+  "t centralen": "T-Centralen",
+  centralen: "T-Centralen",
+
+  // Metro specific
+  "st eriksplan": "S:t Eriksplan",
+  "sankt eriksplan": "S:t Eriksplan",
+
+  // Pendeltåg
+  "uppsala centrum": "Uppsala C",
+  "arlanda central": "Arlanda C",
+
+  // Spårväg City
+  "nordiska museet": "Nordiska museet/Vasamuseet",
+  vasamuseet: "Nordiska museet/Vasamuseet",
+  liljevalchs: "Liljevalchs/Gröna Lund",
+  "gröna lund": "Liljevalchs/Gröna Lund",
+};
+
 export enum LineType {
   CommuterRail = "commuter-rail",
   LightRail = "light-rail",
@@ -10,24 +33,13 @@ export enum LineType {
 export class Line {
   private name: string;
   private shortName: string;
-  private color: string;
   private type: LineType;
-  private corrections: Map<string, string>;
   private geoJSONData?: FeatureCollection;
 
-  private constructor(
-    name: string,
-    shortName: string,
-    color: string,
-    type: LineType,
-    corrections: Record<string, string> = {},
-    geoJSONData: FeatureCollection
-  ) {
+  private constructor(name: string, shortName: string, type: LineType, geoJSONData: FeatureCollection) {
     this.name = name;
     this.shortName = shortName;
-    this.color = color;
     this.type = type;
-    this.corrections = new Map(Object.entries(corrections));
     this.geoJSONData = geoJSONData;
   }
 
@@ -39,16 +51,12 @@ export class Line {
     return this.shortName;
   }
 
-  public getColor(): string {
-    return this.color;
-  }
-
   public getType(): LineType {
     return this.type;
   }
 
-  public getCorrections(): Map<string, string> {
-    return this.corrections;
+  public getCorrections(): Record<string, string> {
+    return stationCorrections;
   }
 
   public getGeoJSONData(): FeatureCollection | undefined {
@@ -102,17 +110,11 @@ export class Line {
 
   // Check if the station name has an alternative spelling
   public correctStationName(stationName: string): string | null {
-    return this.corrections.get(stationName.toLowerCase()) ?? null;
+    return stationCorrections[stationName.toLowerCase()] ?? null;
   }
 
   // Static async factory method to create a Line instance
-  public static async create(
-    name: string,
-    shortName: string,
-    color: string,
-    type: LineType,
-    corrections: Record<string, string> = {}
-  ): Promise<Line> {
+  public static async create(name: string, shortName: string, type: LineType): Promise<Line> {
     // GeoJSON file has to be placed in public/geojson/<LineTyp>/<Line.getShortName()>.geojson
     // Example: public/geojson/metro/red.geojson
     const geoJSONPath = `./geojson/${type}/${shortName}.geojson`;
@@ -123,6 +125,6 @@ export class Line {
 
     const geoJSONData: FeatureCollection = await response.json();
 
-    return new Line(name, shortName, color, type, corrections, geoJSONData);
+    return new Line(name, shortName, type, geoJSONData);
   }
 }

@@ -1,3 +1,4 @@
+import { LineStats } from "../types";
 import { Line } from "./Line";
 
 export enum GuessResult {
@@ -75,6 +76,18 @@ export class Game {
     }
 
     return allStations;
+  }
+
+  public getAllLineStats(): LineStats[] {
+    return this.lines.map((line) => {
+      const totalStations = line.getStations().length;
+      const completedGuesses = line.getStations().filter((station) => this.completedGuesses.has(station)).length;
+      return {
+        lineName: line.getName(),
+        completedGuesses,
+        totalStations,
+      };
+    });
   }
 
   public getLines(): Line[] {
