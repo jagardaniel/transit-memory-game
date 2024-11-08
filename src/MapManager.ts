@@ -7,13 +7,23 @@ import { Line } from "./models/Line";
 export class MapManager {
   private map: MapLibreMap;
   private game: Game;
+  private backgroundCoordinates: LngLatLike;
+  private backgroundZoom: number;
   private initialCoordinates: LngLatLike;
   private initialZoom: number;
+  private isMapLoaded: boolean = false;
 
-  constructor(game: Game, initialCoordinates: LngLatLike, initialZoom: number) {
+  constructor(game: Game) {
     this.game = game;
-    this.initialCoordinates = initialCoordinates;
-    this.initialZoom = initialZoom;
+    this.isMapLoaded = false;
+
+    // Coordinates and zoom used before the game has started
+    this.backgroundCoordinates = [18.071136585570766, 59.32743910768781];
+    this.backgroundZoom = 8;
+
+    // Set by initializeMap later on
+    this.initialCoordinates = [0, 0];
+    this.initialZoom = 0;
 
     this.map = new MapLibreMap({
       container: "map",
@@ -37,9 +47,8 @@ export class MapManager {
           },
         ],
       },
-      center: this.initialCoordinates,
-      zoom: this.initialZoom,
-      minZoom: 10,
+      center: this.backgroundCoordinates,
+      zoom: this.backgroundZoom,
       maxZoom: 15,
     });
 
@@ -48,8 +57,38 @@ export class MapManager {
     this.map.keyboard.disable();
     this.map.touchZoomRotate.disableRotation();
 
-    this.map.on("load", async () => {
-      await this.renderGeoJSONData();
+    this.map.on("load", () => {
+      this.isMapLoaded = true;
+    });
+  }
+
+  public async initializeMap(initialCoordinates: LngLatLike, initialZoom: number): Promise<void> {
+    this.initialCoordinates = initialCoordinates;
+    this.initialZoom = initialZoom;
+
+    await this.waitForMapToLoad();
+    await this.renderGeoJSONData();
+
+    // Fly to default position
+    this.map.flyTo({
+      center: this.initialCoordinates,
+      zoom: this.initialZoom,
+    });
+  }
+
+  // There is an issue where initializeMap tries to run renderGeoJSONData before the map has loaded completely
+  // It results in an empty map and a pretty boring game. This is what ChatGPT suggested to fix this issue.
+  private async waitForMapToLoad(): Promise<void> {
+    if (this.isMapLoaded) {
+      return;
+    }
+
+    // Wait for load event
+    await new Promise<void>((resolve) => {
+      this.map.on("load", () => {
+        this.isMapLoaded = true;
+        resolve();
+      });
     });
   }
 
@@ -167,12 +206,25 @@ export class MapManager {
     });
   }
 
-  public resetStations(): void {
-    const lines = this.game.getLines();
+  public resetMap(): void {
+    // Remove source and layers except for the base tiles
+    const allLayers = this.map.getStyle().layers;
+    const allSources = this.map.getStyle().sources;
 
-    for (const line of lines) {
-      line.resetGuessedStations();
-      this.updateGeoJSON(line);
+    if (allLayers) {
+      allLayers.reverse().forEach((layer) => {
+        if (layer.id != "base-map") {
+          this.map.removeLayer(layer.id);
+        }
+      });
+    }
+
+    if (allSources) {
+      for (const source in allSources) {
+        if (source != "raster-tiles") {
+          this.map.removeSource(source);
+        }
+      }
     }
   }
 
@@ -201,6 +253,13 @@ export class MapManager {
     this.map.flyTo({
       center: this.initialCoordinates,
       zoom: this.initialZoom,
+    });
+  }
+
+  public resetZoomBackground(): void {
+    this.map.flyTo({
+      center: this.backgroundCoordinates,
+      zoom: this.backgroundZoom,
     });
   }
 }

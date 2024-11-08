@@ -11,14 +11,19 @@ export class Game {
   private lines: Line[];
   private completedGuesses: Set<string>;
 
-  constructor(lines: Line[]) {
-    this.lines = lines;
+  constructor() {
+    this.lines = [];
     this.completedGuesses = new Set();
   }
 
   public setInitialGuesses(guesses: string[]): void {
     const stations = new Set(this.getStations());
     this.completedGuesses = new Set(guesses.filter((guess) => stations.has(guess)));
+  }
+
+  public setLines(newLines: Line[]): void {
+    this.lines = newLines;
+    this.reset();
   }
 
   public makeGuess(stationName: string): GuessResult {

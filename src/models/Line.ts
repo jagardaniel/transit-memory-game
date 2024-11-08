@@ -21,6 +21,9 @@ const stationCorrections: Record<string, string> = {
   vasamuseet: "Nordiska museet/Vasamuseet",
   liljevalchs: "Liljevalchs/Gröna Lund",
   "gröna lund": "Liljevalchs/Gröna Lund",
+
+  // Roslagsbanan
+  "stockholm östra": "Stockholms Östra",
 };
 
 export enum LineType {

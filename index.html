@@ -11,8 +11,44 @@
     <div id="map"></div>
     <div id="search">
       <input type="text" id="station-input" class="station-input" placeholder="Station..." />
+      <br />
       <button id="reset-game">Reset game</button>
     </div>
+
+    <div class="modal" id="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <h2>Nytt spel</h2>
+        <p>Hur många stationer kan du minnas?</p>
+
+        <h4>Välj en eller flera linjer:</h4>
+        <ul>
+          <li>
+            <label><input type="checkbox" value="metroSplit" />Tunnelbanan</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="pendeltag" />Pendeltåg</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="lidingobanan" />Lidingöbanan</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="sparvagCity" />Spårväg City</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="nockebybanan" />Nockebybanan</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="tvarbanan" />Tvärbanan</label>
+          </li>
+          <li>
+            <label><input type="checkbox" value="roslagsbanan" />Roslagsbanan</label>
+          </li>
+        </ul>
+        <button id="start-button" disabled>Start Game</button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
