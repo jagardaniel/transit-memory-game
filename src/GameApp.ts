@@ -10,7 +10,6 @@ import {
 import { MapManager } from "./MapManager";
 import { Game, GuessResult } from "./models/Game";
 import { lineLoaders } from "./LineSetup";
-import { LngLatBounds, LngLatLike } from "maplibre-gl";
 import { FeatureCollection } from "geojson";
 
 export class GameApp {
