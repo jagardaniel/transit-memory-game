@@ -10,7 +10,8 @@ import {
 import { MapManager } from "./MapManager";
 import { Game, GuessResult } from "./models/Game";
 import { lineLoaders } from "./LineSetup";
-import { LngLatLike } from "maplibre-gl";
+import { LngLatBounds, LngLatLike } from "maplibre-gl";
+import { FeatureCollection } from "geojson";
 
 export class GameApp {
   private game: Game;
@@ -68,6 +69,8 @@ export class GameApp {
     this.game.setInitialGuesses(savedGuesses);
     this.map.markStationsAsGuessed(savedGuesses);
 
+    this.setInitialView();
+
     if (this.stationInput && this.searchContainer) {
       this.searchContainer.style.display = "block";
       this.stationInput.focus();
@@ -95,6 +98,8 @@ export class GameApp {
     await this.loadLines(userSelectedLines);
     await this.loadMap();
 
+    this.setInitialView();
+
     if (this.stationInput && this.searchContainer) {
       this.searchContainer.style.display = "block";
       this.stationInput.value = "";
@@ -121,7 +126,18 @@ export class GameApp {
     // Wait a little bit so the zoom out effect looks better
     setTimeout(() => {
       this.createNewGame();
-    }, 700);
+    }, 500);
+  }
+
+  private setInitialView(): void {
+    // Send GeoJSON data for all lines to setInitialView so it can create
+    // a bounding box and then fit the map.
+    const geoJSONAll = this.game
+      .getLines()
+      .map((line) => line.getGeoJSONData())
+      .filter((geoJSON): geoJSON is FeatureCollection => geoJSON !== undefined);
+
+    this.map.setInitialView(geoJSONAll);
   }
 
   private getUserSelectedLines(): string[] {
@@ -151,9 +167,7 @@ export class GameApp {
   }
 
   private async loadMap(): Promise<void> {
-    const coordinates: LngLatLike = [18.071136585570766, 59.32743910768781];
-    const zoom = 10.7;
-    await this.map.initializeMap(coordinates, zoom);
+    await this.map.initializeMap();
   }
 
   private setupEventListeners(): void {

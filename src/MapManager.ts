@@ -1,4 +1,4 @@
-import { Map as MapLibreMap, LngLatLike } from "maplibre-gl";
+import { Map as MapLibreMap, LngLatLike, LngLatBounds } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { Game } from "./models/Game";
@@ -62,18 +62,9 @@ export class MapManager {
     });
   }
 
-  public async initializeMap(initialCoordinates: LngLatLike, initialZoom: number): Promise<void> {
-    this.initialCoordinates = initialCoordinates;
-    this.initialZoom = initialZoom;
-
+  public async initializeMap(): Promise<void> {
     await this.waitForMapToLoad();
     await this.renderGeoJSONData();
-
-    // Fly to default position
-    this.map.flyTo({
-      center: this.initialCoordinates,
-      zoom: this.initialZoom,
-    });
   }
 
   // There is an issue where initializeMap tries to run renderGeoJSONData before the map has loaded completely
@@ -236,6 +227,34 @@ export class MapManager {
       if (source) {
         (source as maplibregl.GeoJSONSource).setData(geoJSONData);
       }
+    }
+  }
+
+  // Create a bounding box with all the Points from the lines GeoJSON data
+  // We can then use it to fit the zoom on the map without having to specify
+  // coordinates or zoomlevel manually. ChatGPTs idea.
+  public setInitialView(geoJSONData: any[]): void {
+    let overallBounds: LngLatBounds | null = null;
+
+    geoJSONData.forEach((data) => {
+      const points = data.features.filter((feature: any) => feature.geometry.type === "Point").map((feature: any) => feature.geometry.coordinates);
+
+      if (points.length > 0) {
+        let bounds = new LngLatBounds(points[0], points[0]);
+        points.forEach((point: [number, number]) => bounds.extend(point));
+
+        // Merge bounds into the overall bounds
+        if (overallBounds) {
+          overallBounds.extend(bounds);
+        } else {
+          overallBounds = bounds;
+        }
+      }
+    });
+
+    // "Zoom" to fit on the map
+    if (overallBounds) {
+      this.map.fitBounds(overallBounds, { padding: 20 });
     }
   }
 
