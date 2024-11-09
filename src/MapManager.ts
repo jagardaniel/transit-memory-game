@@ -246,9 +246,9 @@ export class MapManager {
       }
     });
 
-    // "Zoom" to fit on the map
+    // Zoom to fit on the map
     if (overallBounds) {
-      this.map.fitBounds(overallBounds, { padding: 30 });
+      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 13 });
     }
   }
 

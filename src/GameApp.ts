@@ -18,9 +18,10 @@ export class GameApp {
 
   private stationInput: HTMLInputElement | null;
   private searchContainer: HTMLDivElement | null;
-  private lineCheckboxes: HTMLInputElement[] | null;
+  private lineSelections: HTMLDivElement[] | null;
   private startButton: HTMLButtonElement | null;
   private startModal: HTMLDivElement | null;
+  private selectedLines: Set<string>;
 
   constructor() {
     this.game = new Game();
@@ -28,16 +29,17 @@ export class GameApp {
 
     this.stationInput = document.querySelector<HTMLInputElement>("#station-input");
     this.searchContainer = document.querySelector<HTMLDivElement>("#search");
-    this.lineCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]')) as HTMLInputElement[];
+    this.lineSelections = Array.from(document.querySelectorAll(".line-option")) as HTMLDivElement[];
     this.startButton = document.querySelector<HTMLButtonElement>("#start-button");
     this.startModal = document.querySelector<HTMLDivElement>("#modal");
+    this.selectedLines = new Set<string>();
 
     this.setupEventListeners();
     this.checkGameStatus();
   }
 
   private checkGameStatus(): void {
-    // Check if a game has already started
+    // Check if a game has already started in local storage
     const newGame = loadNewGameState();
 
     if (newGame) {
@@ -81,7 +83,7 @@ export class GameApp {
       this.startModal.style.display = "none";
     }
 
-    const userSelectedLines = this.getUserSelectedLines();
+    const userSelectedLines = this.getSelectedLines();
     // This should not happen, but check to be safe
     if (userSelectedLines.length < 1) {
       console.error("Unable to start a game without any specified lines.");
@@ -103,6 +105,18 @@ export class GameApp {
       this.searchContainer.style.display = "block";
       this.stationInput.value = "";
       this.stationInput.focus();
+    }
+
+    // Clear selections in new game modal
+    this.selectedLines.clear();
+    if (this.lineSelections) {
+      this.lineSelections.forEach((lineSelection) => {
+        lineSelection.classList.remove("selected");
+      });
+    }
+
+    if (this.startButton) {
+      this.startButton.disabled = true;
     }
   }
 
@@ -139,18 +153,8 @@ export class GameApp {
     this.map.setInitialView(geoJSONAll);
   }
 
-  private getUserSelectedLines(): string[] {
-    const checkedValues: string[] = [];
-
-    if (this.lineCheckboxes) {
-      this.lineCheckboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          checkedValues.push(checkbox.value);
-        }
-      });
-    }
-
-    return checkedValues;
+  private getSelectedLines(): string[] {
+    return Array.from(this.selectedLines);
   }
 
   private async loadLines(lines: string[]): Promise<void> {
@@ -187,10 +191,10 @@ export class GameApp {
       this.startButton.addEventListener("click", () => this.handleStartGame());
     }
 
-    // Listen to changes for line checkboxes when starting a new game
-    if (this.lineCheckboxes) {
-      this.lineCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", () => this.handleCheckbox());
+    // Listen to click events on line-options
+    if (this.lineSelections) {
+      this.lineSelections.forEach((lineSelection) => {
+        lineSelection.addEventListener("click", () => this.handleLineSelection(lineSelection));
       });
     }
   }
@@ -199,19 +203,21 @@ export class GameApp {
     this.startNewGame();
   }
 
-  private handleCheckbox(): void {
-    const checkedValues: string[] = [];
+  private handleLineSelection(lineSelection: HTMLDivElement): void {
+    const line = lineSelection.getAttribute("data-line");
 
-    if (this.lineCheckboxes) {
-      this.lineCheckboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          checkedValues.push(checkbox.value);
-        }
-      });
-    }
+    if (line) {
+      if (this.selectedLines.has(line)) {
+        this.selectedLines.delete(line);
+        lineSelection.classList.remove("selected");
+      } else {
+        this.selectedLines.add(line);
+        lineSelection.classList.add("selected");
+      }
 
-    if (this.startButton) {
-      this.startButton.disabled = checkedValues.length === 0;
+      if (this.startButton) {
+        this.startButton.disabled = this.selectedLines.size === 0;
+      }
     }
   }
 

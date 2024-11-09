@@ -22,33 +22,67 @@
         <p>Hur många stationer kan du minnas?</p>
 
         <h4>Välj en eller flera linjer:</h4>
-        <ul>
-          <li>
-            <label><input type="checkbox" value="tunnelbanan" />Tunnelbanan</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="pendeltag" />Pendeltåg</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="lidingobanan" />Lidingöbanan</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="sparvagCity" />Spårväg City</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="nockebybanan" />Nockebybanan</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="tvarbanan" />Tvärbanan</label>
-          </li>
-          <li>
-            <label><input type="checkbox" value="roslagsbanan" />Roslagsbanan</label>
-          </li>
-        </ul>
-        <button id="start-button" disabled>Start Game</button>
+        <div class="line-options">
+          <!-- Tunnelbanan -->
+          <div class="line-option" data-line="tunnelbanan" style="border-left: 7px solid #000080">
+            <div class="line-info">
+              <img src="/icons/metro.svg" class="line-icon" />
+              <span class="line-text">Tunnelbanan</span>
+            </div>
+            <span class="line-stations">100 stationer</span>
+          </div>
+          <!-- Pendeltåg -->
+          <div class="line-option" data-line="pendeltag" style="border-left: 7px solid #f266a6">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Pendeltåg</span>
+            </div>
+            <span class="line-stations">69 stationer</span>
+          </div>
+          <!-- Roslagsbanan -->
+          <div class="line-option" data-line="roslagsbanan" style="border-left: 7px solid #a25ea6">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Roslagsbanan</span>
+            </div>
+            <span class="line-stations">39 stationer</span>
+          </div>
+          <!-- Tvärbanan -->
+          <div class="line-option" data-line="tvarbanan" style="border-left: 7px solid #e3861e">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Tvärbanan</span>
+            </div>
+            <span class="line-stations">28 stationer</span>
+          </div>
+          <!-- Lidingöbanan -->
+          <div class="line-option" data-line="lidingobanan" style="border-left: 7px solid #b65f1f">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Lidingöbanan</span>
+            </div>
+            <span class="line-stations">13 stationer</span>
+          </div>
+          <!-- Spårväg City -->
+          <div class="line-option" data-line="sparvagCity" style="border-left: 7px solid #747770">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Spårväg City</span>
+            </div>
+            <span class="line-stations">11 stationer</span>
+          </div>
+          <!-- Nockebybanan -->
+          <div class="line-option" data-line="nockebybanan" style="border-left: 7px solid #627892">
+            <div class="line-info">
+              <img src="/icons/rail.svg" class="line-icon" />
+              <span class="line-text">Nockebybanan</span>
+            </div>
+            <span class="line-stations">10 stationer</span>
+          </div>
+        </div>
+        <button id="start-button" disabled>Starta spel</button>
       </div>
     </div>
-
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -59,7 +59,6 @@ Pendeltåg (#f266a6):
 -- Tåg 41: Södertälje centrum - Märsta (3304343)
 -- Tåg 42X: Nynäshamn - Märsta (8506176)
 -- Tåg 43: Nynäshamn - Bålsta (3303657)
--- Tåg 43X: Nynäshamn - Kallhäll (8518403)
 -- Tåg 44: Tåg 44: Tumba - Kallhäll (8518400)
 -- Tåg 48: Tåg 48: Södertälje centrum - Gnesta (3304345)
 
