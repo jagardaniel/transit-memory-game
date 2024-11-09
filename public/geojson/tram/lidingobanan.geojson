@@ -6,9 +6,7 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -374,9 +372,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -409,9 +405,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -423,9 +417,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -452,9 +444,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -478,9 +468,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -492,9 +480,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -561,9 +547,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -651,9 +635,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -671,9 +653,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -717,9 +697,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -731,9 +709,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -757,9 +733,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -787,9 +761,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -837,9 +809,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -853,9 +823,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -868,9 +836,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -889,9 +855,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -908,9 +872,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -934,9 +896,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -965,9 +925,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -984,9 +942,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -1000,9 +956,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#b65f1f"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -1017,8 +971,7 @@
       "type": "Feature",
       "properties": {
         "name": "Ropsten",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1030,8 +983,7 @@
       "type": "Feature",
       "properties": {
         "name": "AGA",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1043,8 +995,7 @@
       "type": "Feature",
       "properties": {
         "name": "Baggeby",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1056,8 +1007,7 @@
       "type": "Feature",
       "properties": {
         "name": "Skärsätra",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1069,8 +1019,7 @@
       "type": "Feature",
       "properties": {
         "name": "Gåshaga brygga",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1082,8 +1031,7 @@
       "type": "Feature",
       "properties": {
         "name": "Käppala",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1095,8 +1043,7 @@
       "type": "Feature",
       "properties": {
         "name": "Högberga",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1108,8 +1055,7 @@
       "type": "Feature",
       "properties": {
         "name": "Larsberg",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1121,8 +1067,7 @@
       "type": "Feature",
       "properties": {
         "name": "Bodal",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1134,8 +1079,7 @@
       "type": "Feature",
       "properties": {
         "name": "Kottla",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1147,8 +1091,7 @@
       "type": "Feature",
       "properties": {
         "name": "Gåshaga",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1160,8 +1103,7 @@
       "type": "Feature",
       "properties": {
         "name": "Torsvik",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -1173,8 +1115,7 @@
       "type": "Feature",
       "properties": {
         "name": "Brevik",
-        "guessed": false,
-        "markedColor": "#b65f1f"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",

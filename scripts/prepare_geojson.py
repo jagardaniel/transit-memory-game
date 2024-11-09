@@ -47,7 +47,6 @@ def process_geojson(file_path):
                 feature["properties"] = {
                     "name": name,
                     "guessed": False,
-                    "markedColor": args.color,
                 }
                 new_features.append(feature)
 
@@ -58,10 +57,7 @@ def process_geojson(file_path):
             if railway == "platform":
                 continue
 
-            # Add color from argument to LineString
-            feature["properties"] = {
-                "color": args.color
-            }
+            feature["properties"] = {}
             new_features.append(feature)
 
     data["features"] = new_features
@@ -77,8 +73,7 @@ def process_geojson(file_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process a GeoJSON file.")
-    parser.add_argument("-f", "--file", required=True, help="Path to the GeoJSON file to be processed")
-    parser.add_argument("-c", "--color", required=True, help="Color for LineString and marked station")
+    parser.add_argument("file", help="Path to the GeoJSON file to be processed")
 
     args = parser.parse_args()
     process_geojson(args.file)

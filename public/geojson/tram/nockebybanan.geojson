@@ -6,9 +6,7 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -24,9 +22,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -170,9 +166,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -194,9 +188,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -208,9 +200,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -268,9 +258,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -282,9 +270,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -304,9 +290,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -320,9 +304,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -337,9 +319,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -355,9 +335,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#627892"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -371,8 +349,7 @@
       "type": "Feature",
       "properties": {
         "name": "Klövervägen",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -384,8 +361,7 @@
       "type": "Feature",
       "properties": {
         "name": "Smedslätten",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -397,8 +373,7 @@
       "type": "Feature",
       "properties": {
         "name": "Ålstensgatan",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -410,8 +385,7 @@
       "type": "Feature",
       "properties": {
         "name": "Ålstens gård",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -423,8 +397,7 @@
       "type": "Feature",
       "properties": {
         "name": "Nockeby torg",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -436,8 +409,7 @@
       "type": "Feature",
       "properties": {
         "name": "Nockeby",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -449,8 +421,7 @@
       "type": "Feature",
       "properties": {
         "name": "Olovslund",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -462,8 +433,7 @@
       "type": "Feature",
       "properties": {
         "name": "Höglandstorget",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -475,8 +445,7 @@
       "type": "Feature",
       "properties": {
         "name": "Alléparken",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -488,8 +457,7 @@
       "type": "Feature",
       "properties": {
         "name": "Alvik",
-        "guessed": false,
-        "markedColor": "#627892"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",

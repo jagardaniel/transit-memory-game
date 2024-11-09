@@ -6,9 +6,7 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -229,9 +227,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -253,9 +249,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -317,9 +311,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -400,9 +392,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -417,9 +407,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -431,9 +419,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -472,9 +458,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -490,9 +474,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -504,9 +486,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -534,9 +514,7 @@
     },
     {
       "type": "Feature",
-      "properties": {
-        "color": "#747770"
-      },
+      "properties": {},
       "geometry": {
         "type": "LineString",
         "coordinates": [
@@ -571,8 +549,7 @@
       "type": "Feature",
       "properties": {
         "name": "Waldemarsudde",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -584,8 +561,7 @@
       "type": "Feature",
       "properties": {
         "name": "Bellmansro",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -597,8 +573,7 @@
       "type": "Feature",
       "properties": {
         "name": "Kungsträdgården",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -610,8 +585,7 @@
       "type": "Feature",
       "properties": {
         "name": "Styrmansgatan",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -623,8 +597,7 @@
       "type": "Feature",
       "properties": {
         "name": "Nybroplan",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -636,8 +609,7 @@
       "type": "Feature",
       "properties": {
         "name": "Djurgårdsbron",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -649,8 +621,7 @@
       "type": "Feature",
       "properties": {
         "name": "Liljevalchs/Gröna Lund",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -662,8 +633,7 @@
       "type": "Feature",
       "properties": {
         "name": "Djurgårdsskolan",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -675,8 +645,7 @@
       "type": "Feature",
       "properties": {
         "name": "Nordiska museet/Vasamuseet",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -688,8 +657,7 @@
       "type": "Feature",
       "properties": {
         "name": "Skansen",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",
@@ -701,8 +669,7 @@
       "type": "Feature",
       "properties": {
         "name": "T-Centralen",
-        "guessed": false,
-        "markedColor": "#747770"
+        "guessed": false
       },
       "geometry": {
         "type": "Point",

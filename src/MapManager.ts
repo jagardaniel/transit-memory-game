@@ -9,8 +9,6 @@ export class MapManager {
   private game: Game;
   private backgroundCoordinates: LngLatLike;
   private backgroundZoom: number;
-  private initialCoordinates: LngLatLike;
-  private initialZoom: number;
   private isMapLoaded: boolean = false;
 
   constructor(game: Game) {
@@ -20,10 +18,6 @@ export class MapManager {
     // Coordinates and zoom used before the game has started
     this.backgroundCoordinates = [18.071136585570766, 59.32743910768781];
     this.backgroundZoom = 8;
-
-    // Set by initializeMap later on
-    this.initialCoordinates = [0, 0];
-    this.initialZoom = 0;
 
     this.map = new MapLibreMap({
       container: "map",
@@ -107,7 +101,7 @@ export class MapManager {
             "line-cap": "round",
           },
           paint: {
-            "line-color": ["get", "color"],
+            "line-color": line.getColor(),
             "line-width": 3,
             "line-opacity": 1,
           },
@@ -123,7 +117,7 @@ export class MapManager {
             "circle-color": [
               "case",
               ["boolean", ["get", "guessed"], false],
-              ["get", "markedColor"], // Color if guessed
+              line.getColor(), // Color if guessed
               "#ffffff", // Color if not guessed
             ],
             "circle-stroke-color": [
@@ -254,7 +248,7 @@ export class MapManager {
 
     // "Zoom" to fit on the map
     if (overallBounds) {
-      this.map.fitBounds(overallBounds, { padding: 20 });
+      this.map.fitBounds(overallBounds, { padding: 30 });
     }
   }
 
@@ -266,13 +260,6 @@ export class MapManager {
         zoom: 14,
       });
     }
-  }
-
-  public resetZoom(): void {
-    this.map.flyTo({
-      center: this.initialCoordinates,
-      zoom: this.initialZoom,
-    });
   }
 
   public resetZoomBackground(): void {

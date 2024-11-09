@@ -154,13 +154,9 @@ export class GameApp {
   }
 
   private async loadLines(lines: string[]): Promise<void> {
-    // If the metro is selected with other lines, count it as an entire line.
-    const updatedLines = lines.length > 1 ? lines.map((line) => (line === "metroSplit" ? "metroFull" : line)) : lines;
-
     // Dynamically load lines based on input
-    const selectedLines = updatedLines as (keyof typeof lineLoaders)[];
-    const validSelectedLines = selectedLines.filter((lineKey) => lineKey in lineLoaders);
-    const loadedLines = (await Promise.all(validSelectedLines.map((lineKey) => lineLoaders[lineKey]()))).flat();
+    const selectedLines = lines as (keyof typeof lineLoaders)[];
+    const loadedLines = (await Promise.all(selectedLines.map((lineKey) => lineLoaders[lineKey]()))).flat();
 
     this.game.setLines(loadedLines);
   }
