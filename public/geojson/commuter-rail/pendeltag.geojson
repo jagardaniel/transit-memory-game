@@ -2,7 +2,7 @@
   "type": "FeatureCollection",
   "generator": "overpass-turbo",
   "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
-  "timestamp": "2024-11-09T19:45:45Z",
+  "timestamp": "2024-11-10T01:34:19Z",
   "features": [
     {
       "type": "Feature",
@@ -7354,18 +7354,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Bro Nygård",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.6534003, 59.5063187]
-      },
-      "id": "node/22470997"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Kallhäll",
         "guessed": false
       },
@@ -7402,30 +7390,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Söderby",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.7993522, 59.197308]
-      },
-      "id": "node/35439366"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Garnudden",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.7706151, 59.1933621]
-      },
-      "id": "node/35439386"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Rönninge",
         "guessed": false
       },
@@ -7434,18 +7398,6 @@
         "coordinates": [17.750695, 59.1936084]
       },
       "id": "node/35439404"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Dånviken",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.714538, 59.1900129]
-      },
-      "id": "node/36206072"
     },
     {
       "type": "Feature",
@@ -7570,42 +7522,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Huvudsta",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.0008604, 59.3547114]
-      },
-      "id": "node/873822670"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Duvbo",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.9322052, 59.3707276]
-      },
-      "id": "node/873822675"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Utsikten",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.8963208, 59.203135]
-      },
-      "id": "node/875581673"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Södertälje centrum",
         "guessed": false
       },
@@ -7654,18 +7570,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Älvsjö godsbangård",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.0202967, 59.2933276]
-      },
-      "id": "node/1287687239"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Flemingsberg",
         "guessed": false
       },
@@ -7686,18 +7590,6 @@
         "coordinates": [17.9781042, 59.2360208]
       },
       "id": "node/1290239996"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Högdalen",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.0420156, 59.2573028]
-      },
-      "id": "node/1297839207"
     },
     {
       "type": "Feature",
@@ -7786,18 +7678,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Skavstaby",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.8960667, 59.5470795]
-      },
-      "id": "node/1500728256"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Upplands Väsby",
         "guessed": false
       },
@@ -7858,18 +7738,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Kummelby",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.9564678, 59.4176358]
-      },
-      "id": "node/1501420783"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Ulriksdal",
         "guessed": false
       },
@@ -7902,18 +7770,6 @@
         "coordinates": [17.6491934, 59.8573265]
       },
       "id": "node/1504239191"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Ekeby",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.7553579, 59.7765817]
-      },
-      "id": "node/1505057297"
     },
     {
       "type": "Feature",
@@ -7998,18 +7854,6 @@
         "coordinates": [17.6327815, 59.5122323]
       },
       "id": "node/2509424907"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Toresta",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.5744253, 59.5335691]
-      },
-      "id": "node/2509424924"
     },
     {
       "type": "Feature",
@@ -8122,18 +7966,6 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Bränninge",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.6353006, 59.1405612]
-      },
-      "id": "node/3159365715"
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "name": "Vega",
         "guessed": false
       },
@@ -8166,18 +7998,6 @@
         "coordinates": [18.0458821, 59.3432614]
       },
       "id": "node/5044481838"
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "name": "Säby",
-        "guessed": false
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [17.7013839, 59.8296964]
-      },
-      "id": "node/9536733557"
     }
   ]
 }

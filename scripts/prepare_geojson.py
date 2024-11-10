@@ -38,6 +38,18 @@ def process_geojson(file_path):
         # Also add a property so we can mark it as guessed.
         if geometry_type == "Point":
             name = feature["properties"].get("name", None)
+            railway = feature["properties"].get("railway", None)
+            id = feature["properties"].get("@id", None)
+
+            # Skip Points with railway property set to technical_station
+            if railway == "technical_station":
+                continue
+
+            # The query for Pendeltåget includes three stations that isn't a part of the line for some reason
+            # and there is no unique properties we can use to filter them out. Remove them based on the node id.
+            # Huvudsta, Duvbo and Toresta:
+            if id == "node/873822675" or id == "node/873822670" or id == "node/2509424924":
+                continue
 
             if name in name_replacements:
                 name = name_replacements[name]

@@ -31,7 +31,7 @@ export class GameApp {
     this.searchContainer = document.querySelector<HTMLDivElement>("#search");
     this.lineSelections = Array.from(document.querySelectorAll(".line-option")) as HTMLDivElement[];
     this.startButton = document.querySelector<HTMLButtonElement>("#start-button");
-    this.startModal = document.querySelector<HTMLDivElement>("#modal");
+    this.startModal = document.querySelector<HTMLDivElement>("#modal-overlay");
     this.selectedLines = new Set<string>();
 
     this.setupEventListeners();
@@ -51,7 +51,7 @@ export class GameApp {
 
   private createNewGame(): void {
     if (this.startModal) {
-      this.startModal.style.display = "block";
+      this.startModal.classList.add("show");
     }
 
     // The rest happens in startNewGame() when the start button is pressed
@@ -80,7 +80,7 @@ export class GameApp {
 
   private async startNewGame(): Promise<void> {
     if (this.startModal) {
-      this.startModal.style.display = "none";
+      this.startModal.classList.remove("show");
     }
 
     const userSelectedLines = this.getSelectedLines();
@@ -136,10 +136,7 @@ export class GameApp {
     this.map.resetZoomBackground();
 
     // Show start new game modal again
-    // Wait a little bit so the zoom out effect looks better
-    setTimeout(() => {
-      this.createNewGame();
-    }, 500);
+    this.createNewGame();
   }
 
   private setInitialView(): void {
