@@ -21,6 +21,9 @@ export class GameApp {
   private lineSelections: HTMLDivElement[] | null;
   private startButton: HTMLButtonElement | null;
   private startModal: HTMLDivElement | null;
+  private sidebar: HTMLDivElement | null;
+  //private guessList: HTMLUListElement | null;
+  private lineList: HTMLUListElement | null;
   private selectedLines: Set<string>;
 
   constructor() {
@@ -32,6 +35,9 @@ export class GameApp {
     this.lineSelections = Array.from(document.querySelectorAll(".line-option")) as HTMLDivElement[];
     this.startButton = document.querySelector<HTMLButtonElement>("#start-button");
     this.startModal = document.querySelector<HTMLDivElement>("#modal-overlay");
+    this.sidebar = document.querySelector<HTMLDivElement>("#sidebar");
+    //this.guessList = document.querySelector<HTMLUListElement>("#guess-list");
+    this.lineList = document.querySelector<HTMLUListElement>("#line-list");
     this.selectedLines = new Set<string>();
 
     this.setupEventListeners();
@@ -76,6 +82,9 @@ export class GameApp {
       this.searchContainer.style.display = "block";
       this.stationInput.focus();
     }
+
+    this.updateUI();
+    this.toggleSidebar(true);
   }
 
   private async startNewGame(): Promise<void> {
@@ -118,6 +127,9 @@ export class GameApp {
     if (this.startButton) {
       this.startButton.disabled = true;
     }
+
+    this.updateUI();
+    this.toggleSidebar(true);
   }
 
   private resetGame(): void {
@@ -130,12 +142,12 @@ export class GameApp {
     }
 
     this.game.reset();
-    this.updateUI();
 
     this.map.resetMap();
     this.map.resetZoomBackground();
 
     // Show start new game modal again
+    this.toggleSidebar(false);
     this.createNewGame();
   }
 
@@ -148,6 +160,16 @@ export class GameApp {
       .filter((geoJSON): geoJSON is FeatureCollection => geoJSON !== undefined);
 
     this.map.setInitialView(geoJSONAll);
+  }
+
+  private toggleSidebar(show: boolean): void {
+    if (this.sidebar) {
+      if (show) {
+        this.sidebar.classList.remove("hidden");
+      } else {
+        this.sidebar.classList.add("hidden");
+      }
+    }
   }
 
   private getSelectedLines(): string[] {
@@ -192,6 +214,20 @@ export class GameApp {
     if (this.lineSelections) {
       this.lineSelections.forEach((lineSelection) => {
         lineSelection.addEventListener("click", () => this.handleLineSelection(lineSelection));
+      });
+    }
+
+    // Auto focus input
+    // This doesn't work very well because you can't mark text anymore
+    // Probably better to set focus from MapManager on certain events instead but not sure
+    // what the best way to do it is.
+    if (this.stationInput) {
+      this.stationInput.addEventListener("blur", () => {
+        setTimeout(() => {
+          if (document.activeElement !== this.stationInput) {
+            this.stationInput!.focus();
+          }
+        }, 10);
       });
     }
   }
@@ -249,9 +285,7 @@ export class GameApp {
         this.stationInput.classList.add(...styling);
 
         setTimeout(() => {
-          if (this.stationInput) {
-            this.stationInput.classList.remove(...styling);
-          }
+          this.stationInput!.classList.remove(...styling);
         }, 500);
       }
     }
@@ -264,5 +298,42 @@ export class GameApp {
 
   private updateUI(): void {
     console.log("Updating UI...");
+    this.updateLineList();
+    //this.updateGuessList();
   }
+
+  private updateLineList(): void {
+    if (!this.lineList) return;
+    this.lineList.innerHTML = "";
+
+    this.game.getLines().forEach((line) => {
+      const listItem = document.createElement("li");
+      const lineStats = this.game.getLineStats(line.getName());
+
+      if (lineStats) {
+        const text = `${line.getName()} - ${lineStats.completedGuesses}/${lineStats.totalStations}`;
+        listItem.textContent = text;
+      }
+
+      this.lineList!.appendChild(listItem);
+    });
+  }
+
+  /*
+  private updateGuessList(): void {
+    if (!this.guessList) return;
+    this.guessList.innerHTML = "";
+
+    this.game
+      .getCompletedGuesses()
+      .reverse()
+      .forEach((guess) => {
+        const listItem = document.createElement("li");
+        listItem.classList.add("guess-item"); // Optional class for styling
+        listItem.textContent = guess;
+
+        this.guessList!.appendChild(listItem);
+      });
+  }
+      */
 }

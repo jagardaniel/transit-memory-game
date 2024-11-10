@@ -4,8 +4,8 @@
 		<image  width="256" height="256" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAAAXNSR0IB2cksfwAAAANQTFRFAAAAp3o92gAAADNJREFUeJztyqEBAAAMAqD5/9M7wWqATK6IIAiCIAiCIAiCIAiCIAiCIAiCIAiCIAjCdniycAEBJl56AgAAAABJRU5ErkJggg=="/>
 	</defs>
 	<style>
-		.s0 { fill: #000000 } 
-		.s1 { fill: #ffffff } 
+		.s0 { fill: #000000 }
+		.s1 { fill: #ffffff }
 	</style>
 	<use id="Layer 1" href="#img1" x="0" y="0"/>
 	<path class="s0" d="m6.7 127.6v104.7c0 8.9 7.3 16.2 16.2 16.2h209.3c8.9 0 16.2-7.2 16.2-16.2v-209.5c0-8.9-7.3-16.1-16.2-16.1h-209.3c-8.9 0-16.2 7.2-16.2 16.1z"/>

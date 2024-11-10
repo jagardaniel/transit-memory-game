@@ -8,15 +8,22 @@
     <title>Gissa stationer</title>
   </head>
   <body>
+    <!-- MapLibre map -->
     <div id="map"></div>
+    <!-- Sidebar -->
+    <div id="sidebar" class="hidden">
+      <h4>Linjer</h4>
+      <ul id="line-list"></ul>
+    </div>
+
     <div id="search">
-      <input type="text" id="station-input" class="station-input" placeholder="Station..." />
-      <br />
+      <input type="text" id="station-input" class="station-input" placeholder="Station..." autofocus />
+      <!-- Temporary reset button -->
       <button id="reset-game">Reset game</button>
     </div>
 
+    <!-- Modal content -->
     <div class="modal-overlay" id="modal-overlay">
-      <!-- Modal content -->
       <div class="modal">
         <h2>Nytt spel</h2>
         <p>Hur många stationer kan du minnas?</p>

@@ -29,7 +29,7 @@ export class MapManager {
             tiles: ["https://basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"],
             tileSize: 256,
             attribution:
-              'Map tiles by <a target="_blank" href="https://carto.com/attributions">CARTO</a>. Data &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors',
+              'Map tiles by <a target="_blank" href="https://carto.com/attributions">CARTO</a> | Data &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors | <a href="https://github.com/jagardaniel/transit-memory-game" target="_blank">GitHub repository</a>',
           },
         },
         glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
@@ -248,7 +248,7 @@ export class MapManager {
 
     // Zoom to fit on the map
     if (overallBounds) {
-      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 13 });
+      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 12 });
     }
   }
 
@@ -257,7 +257,7 @@ export class MapManager {
     if (coordinates) {
       this.map.flyTo({
         center: [coordinates[0], coordinates[1]],
-        zoom: 14,
+        zoom: 13,
       });
     }
   }

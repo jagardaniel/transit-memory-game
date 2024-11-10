@@ -83,16 +83,34 @@ export class Game {
     return allStations;
   }
 
-  public getAllLineStats(): LineStats[] {
-    return this.lines.map((line) => {
-      const totalStations = line.getStations().length;
+  public getLineStats(lineName: string): LineStats | null {
+    const line = this.getLine(lineName);
+
+    if (line) {
       const completedGuesses = line.getStations().filter((station) => this.completedGuesses.has(station)).length;
+      const totalStations = line.getStations().length;
+
       return {
-        lineName: line.getName(),
         completedGuesses,
         totalStations,
       };
-    });
+    }
+
+    return null;
+  }
+
+  public getStationLineColors(stationName: string): string[] {
+    const colors: string[] = [];
+
+    for (const line of this.lines) {
+      const stationExistsOnLine = line.getStations().some((station) => station.toLowerCase() === stationName.toLowerCase());
+
+      if (stationExistsOnLine) {
+        colors.push(line.getColor());
+      }
+    }
+
+    return colors;
   }
 
   public getLines(): Line[] {
