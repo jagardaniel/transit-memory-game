@@ -10,6 +10,7 @@ export class MapManager {
   private backgroundCoordinates: LngLatLike;
   private backgroundZoom: number;
   private isMapLoaded: boolean = false;
+  private flyZoomLevel: number;
 
   constructor(game: Game) {
     this.game = game;
@@ -18,6 +19,9 @@ export class MapManager {
     // Coordinates and zoom used before the game has started
     this.backgroundCoordinates = [18.071136585570766, 59.32743910768781];
     this.backgroundZoom = 8;
+
+    // Fly to station default zoom level
+    this.flyZoomLevel = 13;
 
     this.map = new MapLibreMap({
       container: "map",
@@ -154,7 +158,7 @@ export class MapManager {
             "text-halo-blur": 1,
           },
           filter: ["==", ["get", "guessed"], true],
-          minzoom: 11,
+          minzoom: 16,
         });
       } else {
         console.error(`GeoJSON data for line "${line.getName()}" is undefined.`);
@@ -249,6 +253,28 @@ export class MapManager {
     // Zoom to fit on the map
     if (overallBounds) {
       this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 12 });
+
+      // Get zoom level after the animation is done from fitBounds
+      this.map.once("moveend", () => {
+        const fittingZoomLevel = this.map.getZoom();
+
+        // Adjust zoom level offset based on the fitting zoom level
+        let additionalZoom = Math.max(1, 5 - Math.log2(fittingZoomLevel));
+        this.flyZoomLevel = fittingZoomLevel + additionalZoom;
+        this.flyZoomLevel = Math.min(this.flyZoomLevel, 14);
+
+        // Adjust zoom level that our labels are displayed at
+        const labelZoomLevel = this.flyZoomLevel - 2;
+        const allLayers = this.map.getStyle().layers;
+
+        if (allLayers) {
+          allLayers.forEach((layer) => {
+            if (layer.id.includes("labels")) {
+              this.map.setLayerZoomRange(layer.id, labelZoomLevel, 24);
+            }
+          });
+        }
+      });
     }
   }
 
@@ -257,7 +283,7 @@ export class MapManager {
     if (coordinates) {
       this.map.flyTo({
         center: [coordinates[0], coordinates[1]],
-        zoom: 13,
+        zoom: this.flyZoomLevel,
       });
     }
   }

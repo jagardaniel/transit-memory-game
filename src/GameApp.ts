@@ -22,7 +22,7 @@ export class GameApp {
   private startButton: HTMLButtonElement | null;
   private startModal: HTMLDivElement | null;
   private sidebar: HTMLDivElement | null;
-  //private guessList: HTMLUListElement | null;
+  private guessList: HTMLUListElement | null;
   private lineList: HTMLUListElement | null;
   private selectedLines: Set<string>;
 
@@ -36,7 +36,7 @@ export class GameApp {
     this.startButton = document.querySelector<HTMLButtonElement>("#start-button");
     this.startModal = document.querySelector<HTMLDivElement>("#modal-overlay");
     this.sidebar = document.querySelector<HTMLDivElement>("#sidebar");
-    //this.guessList = document.querySelector<HTMLUListElement>("#guess-list");
+    this.guessList = document.querySelector<HTMLUListElement>("#guess-list");
     this.lineList = document.querySelector<HTMLUListElement>("#line-list");
     this.selectedLines = new Set<string>();
 
@@ -297,9 +297,8 @@ export class GameApp {
   }
 
   private updateUI(): void {
-    console.log("Updating UI...");
     this.updateLineList();
-    //this.updateGuessList();
+    this.updateGuessList();
   }
 
   private updateLineList(): void {
@@ -319,7 +318,6 @@ export class GameApp {
     });
   }
 
-  /*
   private updateGuessList(): void {
     if (!this.guessList) return;
     this.guessList.innerHTML = "";
@@ -335,5 +333,4 @@ export class GameApp {
         this.guessList!.appendChild(listItem);
       });
   }
-      */
 }
