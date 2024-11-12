@@ -41,6 +41,7 @@ export class GameApp {
     this.selectedLines = new Set<string>();
 
     this.setupEventListeners();
+    this.setupMapListeners();
     this.checkGameStatus();
   }
 
@@ -216,20 +217,15 @@ export class GameApp {
         lineSelection.addEventListener("click", () => this.handleLineSelection(lineSelection));
       });
     }
+  }
 
-    // Auto focus input
-    // This doesn't work very well because you can't mark text anymore
-    // Probably better to set focus from MapManager on certain events instead but not sure
-    // what the best way to do it is.
-    if (this.stationInput) {
-      this.stationInput.addEventListener("blur", () => {
-        setTimeout(() => {
-          if (document.activeElement !== this.stationInput) {
-            this.stationInput!.focus();
-          }
-        }, 10);
-      });
-    }
+  private setupMapListeners(): void {
+    // "mapdragend" event from MapManager
+    window.addEventListener("mapdragend", () => {
+      if (this.stationInput) {
+        this.stationInput.focus();
+      }
+    });
   }
 
   private handleStartGame(): void {

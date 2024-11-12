@@ -38,13 +38,15 @@ export class Line {
   private shortName: string;
   private color: string;
   private type: LineType;
+  private flyToZoomLevel: number; // Level to zoom into a station on this line
   private geoJSONData?: FeatureCollection;
 
-  private constructor(name: string, shortName: string, color: string, type: LineType, geoJSONData: FeatureCollection) {
+  private constructor(name: string, shortName: string, color: string, type: LineType, flyToZoomLevel: number, geoJSONData: FeatureCollection) {
     this.name = name;
     this.shortName = shortName;
     this.color = color;
     this.type = type;
+    this.flyToZoomLevel = flyToZoomLevel;
     this.geoJSONData = geoJSONData;
   }
 
@@ -62,6 +64,10 @@ export class Line {
 
   public getType(): LineType {
     return this.type;
+  }
+
+  public getFlyToZoomLevel(): number {
+    return this.flyToZoomLevel;
   }
 
   public getCorrections(): Record<string, string> {
@@ -123,7 +129,7 @@ export class Line {
   }
 
   // Static async factory method to create a Line instance
-  public static async create(name: string, shortName: string, color: string, type: LineType): Promise<Line> {
+  public static async create(name: string, shortName: string, color: string, type: LineType, flyToZoomLevel: number = 13.5): Promise<Line> {
     // GeoJSON file has to be placed in public/geojson/<LineTyp>/<Line.getShortName()>.geojson
     // Example: public/geojson/metro/red.geojson
     const geoJSONPath = `./geojson/${type}/${shortName}.geojson`;
@@ -134,6 +140,6 @@ export class Line {
 
     const geoJSONData: FeatureCollection = await response.json();
 
-    return new Line(name, shortName, color, type, geoJSONData);
+    return new Line(name, shortName, color, type, flyToZoomLevel, geoJSONData);
   }
 }

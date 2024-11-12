@@ -113,6 +113,21 @@ export class Game {
     return colors;
   }
 
+  // Get a lines flyToZoomLevel by station name. A station can exist on multiple lines
+  // but they should always be pretty similar so just return the first one we can find
+  public getFlyToZoomLevel(stationName: string): number | null {
+    for (const line of this.getLines()) {
+      const stations = line.getStations();
+
+      const station = stations.find((station) => station === stationName);
+      if (station) {
+        return line.getFlyToZoomLevel();
+      }
+    }
+
+    return null;
+  }
+
   public getLines(): Line[] {
     return this.lines;
   }

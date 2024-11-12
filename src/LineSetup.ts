@@ -16,19 +16,19 @@ export const lineNames: { [key in keyof LineNameOptions]: string } = {
 
 export const lineLoaders = {
   tunnelbanan: async () => {
-    const red = await Line.create("Röda linjen", "red", "#d71d24", LineType.Metro);
-    const green = await Line.create("Gröna linjen", "green", "#148541", LineType.Metro);
-    const blue = await Line.create("Blå linjen", "blue", "#007db8", LineType.Metro);
+    const red = await Line.create("Röda linjen", "red", "#d71d24", LineType.Metro, 13);
+    const green = await Line.create("Gröna linjen", "green", "#148541", LineType.Metro, 13);
+    const blue = await Line.create("Blå linjen", "blue", "#007db8", LineType.Metro, 13);
     return [red, green, blue];
   },
   pendeltag: async () => {
-    return await Line.create("Pendeltåg", "pendeltag", "#f266a6", LineType.CommuterRail);
+    return await Line.create("Pendeltåg", "pendeltag", "#f266a6", LineType.CommuterRail, 11);
   },
   lidingobanan: async () => {
     return await Line.create("Lidingöbanan", "lidingobanan", "#b65f1f", LineType.Tram);
   },
   sparvagCity: async () => {
-    return await Line.create("Spårväg City", "sparvagcity", "#747770", LineType.Tram);
+    return await Line.create("Spårväg City", "sparvagcity", "#747770", LineType.Tram, 14);
   },
   nockebybanan: async () => {
     return await Line.create("Nockebybanan", "nockebybanan", "#627892", LineType.Tram);
@@ -37,6 +37,6 @@ export const lineLoaders = {
     return await Line.create("Tvärbanan", "tvarbanan", "#e3861e", LineType.Tram);
   },
   roslagsbanan: async () => {
-    return await Line.create("Roslagsbanan", "roslagsbanan", "#a25ea6", LineType.LightRail);
+    return await Line.create("Roslagsbanan", "roslagsbanan", "#a25ea6", LineType.LightRail, 12);
   },
 };

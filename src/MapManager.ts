@@ -10,7 +10,6 @@ export class MapManager {
   private backgroundCoordinates: LngLatLike;
   private backgroundZoom: number;
   private isMapLoaded: boolean = false;
-  private flyZoomLevel: number;
 
   constructor(game: Game) {
     this.game = game;
@@ -19,9 +18,6 @@ export class MapManager {
     // Coordinates and zoom used before the game has started
     this.backgroundCoordinates = [18.071136585570766, 59.32743910768781];
     this.backgroundZoom = 8;
-
-    // Fly to station default zoom level
-    this.flyZoomLevel = 13;
 
     this.map = new MapLibreMap({
       container: "map",
@@ -58,6 +54,11 @@ export class MapManager {
     this.map.on("load", () => {
       this.isMapLoaded = true;
     });
+
+    // Emit event when the user stops dragging the map
+    this.map.on("dragend", () => {
+      this.emitCustomEvent("mapdragend");
+    });
   }
 
   public async initializeMap(): Promise<void> {
@@ -79,6 +80,11 @@ export class MapManager {
         resolve();
       });
     });
+  }
+
+  private emitCustomEvent(eventName: string, detail: any = {}) {
+    const event = new CustomEvent(eventName, { detail });
+    window.dispatchEvent(event);
   }
 
   private async renderGeoJSONData(): Promise<void> {
@@ -158,7 +164,7 @@ export class MapManager {
             "text-halo-blur": 1,
           },
           filter: ["==", ["get", "guessed"], true],
-          minzoom: 16,
+          minzoom: 11, // This is updated by setInitialView later
         });
       } else {
         console.error(`GeoJSON data for line "${line.getName()}" is undefined.`);
@@ -250,21 +256,16 @@ export class MapManager {
       }
     });
 
-    // Zoom to fit on the map
     if (overallBounds) {
+      // Zoom to fit on the map
       this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 12 });
 
       // Get zoom level after the animation is done from fitBounds
       this.map.once("moveend", () => {
         const fittingZoomLevel = this.map.getZoom();
 
-        // Adjust zoom level offset based on the fitting zoom level
-        let additionalZoom = Math.max(1, 5 - Math.log2(fittingZoomLevel));
-        this.flyZoomLevel = fittingZoomLevel + additionalZoom;
-        this.flyZoomLevel = Math.min(this.flyZoomLevel, 14);
-
-        // Adjust zoom level that our labels are displayed at
-        const labelZoomLevel = this.flyZoomLevel - 2;
+        // Adjust zoom level for labels based on the fittingZoomLevel
+        const labelZoomLevel = fittingZoomLevel + 0.2;
         const allLayers = this.map.getStyle().layers;
 
         if (allLayers) {
@@ -280,10 +281,12 @@ export class MapManager {
 
   public flyToStation(stationName: string): void {
     const coordinates = this.findStationCoordinates(stationName);
-    if (coordinates) {
+    const flyToZoomLevel = this.game.getFlyToZoomLevel(stationName);
+
+    if (coordinates && flyToZoomLevel) {
       this.map.flyTo({
         center: [coordinates[0], coordinates[1]],
-        zoom: this.flyZoomLevel,
+        zoom: flyToZoomLevel,
       });
     }
   }
