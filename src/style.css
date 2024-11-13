@@ -90,6 +90,23 @@ button {
   z-index: 100;
 }
 
+/* Line stats in sidebar */
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-family: "Inter", sans-serif;
+}
+
+.stats-element {
+  font-weight: bold;
+  color: #fff;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Guess list in sidebar */
 .guess-item {
   display: flex;
   align-items: center;
@@ -288,4 +305,40 @@ button {
 
 .duplicate-guess {
   border: 2px solid #e5d700;
+}
+
+/* Styling for mobiles */
+@media (max-width: 600px) {
+  .modal {
+    width: 80%;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p,
+  h4 {
+    font-size: 1rem;
+  }
+
+  .line-option {
+    height: 40px;
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+
+  .line-text {
+    font-size: 1rem;
+  }
+
+  .line-stations {
+    font-size: 0.9rem;
+  }
+
+  #start-button {
+    font-size: 1rem;
+    padding: 8px;
+  }
 }

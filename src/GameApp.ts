@@ -295,20 +295,42 @@ export class GameApp {
 
   private updateUI(): void {
     this.updateLineList();
-    this.updateGuessList();
+    //this.updateGuessList();
   }
 
   private updateLineList(): void {
     if (!this.lineList) return;
     this.lineList.innerHTML = "";
 
-    this.game.getLines().forEach((line) => {
+    // Sort lines based on stations but group the metro lines together at the top. By ChatGPT obviously:
+    const lines = this.game.getLines();
+    const metroLines = lines.filter((line) => line.getType() === "metro").sort((a, b) => b.getStations().length - a.getStations().length);
+    const otherLines = lines.filter((line) => line.getType() !== "metro").sort((a, b) => b.getStations().length - a.getStations().length);
+
+    // Combine grouped and sorted lines
+    const sortedLines = [...metroLines, ...otherLines];
+
+    // Check if there is only metro lines
+    const hasNonMetroLines = lines.some((line) => line.getType() !== "metro");
+
+    sortedLines.forEach((line) => {
       const listItem = document.createElement("li");
+      listItem.classList.add("line-item");
+
       const lineStats = this.game.getLineStats(line.getName());
+      const lineName = (hasNonMetroLines && line.getType() === "metro" ? "T: " : "") + line.getName();
 
       if (lineStats) {
-        const text = `${line.getName()} - ${lineStats.completedGuesses}/${lineStats.totalStations}`;
-        listItem.textContent = text;
+        const nameElement = document.createElement("span");
+        nameElement.textContent = lineName;
+
+        const statsElement = document.createElement("span");
+        statsElement.classList.add("stats-element");
+        statsElement.style.backgroundColor = line.getColor();
+        statsElement.textContent = `${lineStats.completedGuesses}/${lineStats.totalStations}`;
+
+        listItem.appendChild(nameElement);
+        listItem.appendChild(statsElement);
       }
 
       this.lineList!.appendChild(listItem);

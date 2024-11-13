@@ -11,6 +11,7 @@ const stationCorrections: Record<string, string> = {
   // Metro specific
   "st eriksplan": "S:t Eriksplan",
   "sankt eriksplan": "S:t Eriksplan",
+  "sundbyberg centrum": "Sundbybergs centrum",
 
   // Pendeltåg
   "uppsala centrum": "Uppsala C",

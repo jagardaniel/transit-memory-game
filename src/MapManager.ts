@@ -17,7 +17,7 @@ export class MapManager {
 
     // Coordinates and zoom used before the game has started
     this.backgroundCoordinates = [18.071136585570766, 59.32743910768781];
-    this.backgroundZoom = 8;
+    this.backgroundZoom = 7;
 
     this.map = new MapLibreMap({
       container: "map",
@@ -284,6 +284,9 @@ export class MapManager {
             }
           });
         }
+
+        // Set max zoom. We have do it after fitBounds is done, otherwise the animation doesn't work
+        this.map.setMinZoom(7.5);
       });
     }
   }
