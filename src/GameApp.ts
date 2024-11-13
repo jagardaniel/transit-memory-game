@@ -334,6 +334,29 @@ export class GameApp {
 
       this.lineList!.appendChild(listItem);
     });
+
+    // Add row for total stats
+    const completedGuesses = this.game.getCompletedGuesses().length;
+    const allStations = this.game.getStations().length;
+
+    const listItem = document.createElement("li");
+    listItem.classList.add("line-item");
+    listItem.style.marginTop = "5px";
+    listItem.style.paddingTop = "10px";
+    listItem.style.borderTop = "1px solid #f3f3f3";
+
+    const nameElement = document.createElement("span");
+    nameElement.textContent = "Totalt";
+
+    const statsElement = document.createElement("span");
+    statsElement.classList.add("stats-element");
+    statsElement.style.backgroundColor = "#f0f0f0";
+    statsElement.style.color = "#666666";
+    statsElement.textContent = `${completedGuesses}/${allStations}`;
+
+    listItem.appendChild(nameElement);
+    listItem.appendChild(statsElement);
+    this.lineList!.appendChild(listItem);
   }
 
   /*
