@@ -82,12 +82,36 @@ button {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 300px;
+  width: 250px;
   background-color: #fff;
-  padding: 10px;
+  padding: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 100;
+  transition: width 0.5s;
+}
+
+.sidebar-button-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* When sidebar is in small mode */
+#sidebar.small {
+  width: 60px;
+  padding: 5px;
+}
+
+/* Hide the line name (span) in small mode  */
+#sidebar.small .line-item span:first-child {
+  display: none;
+}
+
+/* Center stats elements when the sidebar is in small mode */
+#sidebar.small .line-item .stats-element {
+  margin: 0 auto;
+  display: block;
+  text-align: center;
 }
 
 /* Line stats in sidebar */
@@ -340,5 +364,40 @@ button {
   #start-button {
     font-size: 1rem;
     padding: 8px;
+  }
+
+  #search {
+    left: 40%;
+    width: 70%;
+    transform: translateX(-50%);
+  }
+
+  .station-input {
+    width: 100%;
+    height: 40px;
+    padding-left: 40px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  #sidebar {
+    width: 50%; /* Make it narrower on mobile */
+    padding: 8px;
+    transition: width 0.5s;
+  }
+
+  #sidebar.small {
+    width: 50px;
+    padding: 3px;
+  }
+
+  .line-item {
+    padding: 2px 0;
+    font-size: 0.9rem; /* Smaller font size */
+  }
+
+  .stats-element {
+    font-size: 0.7rem;
+    padding: 3px 6px;
   }
 }

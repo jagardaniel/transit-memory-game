@@ -22,8 +22,8 @@ export class GameApp {
   private startButton: HTMLButtonElement | null;
   private startModal: HTMLDivElement | null;
   private sidebar: HTMLDivElement | null;
-  //private guessList: HTMLUListElement | null;
   private lineList: HTMLUListElement | null;
+  private toggleSidebarButton: HTMLButtonElement | null;
   private selectedLines: Set<string>;
 
   constructor() {
@@ -36,13 +36,14 @@ export class GameApp {
     this.startButton = document.querySelector<HTMLButtonElement>("#start-button");
     this.startModal = document.querySelector<HTMLDivElement>("#modal-overlay");
     this.sidebar = document.querySelector<HTMLDivElement>("#sidebar");
-    //this.guessList = document.querySelector<HTMLUListElement>("#guess-list");
     this.lineList = document.querySelector<HTMLUListElement>("#line-list");
+    this.toggleSidebarButton = document.querySelector<HTMLButtonElement>("#sidebar-button");
     this.selectedLines = new Set<string>();
 
     this.setupEventListeners();
     this.setupMapListeners();
     this.checkGameStatus();
+    this.checkInitialSidebarState();
   }
 
   private checkGameStatus(): void {
@@ -85,7 +86,7 @@ export class GameApp {
     }
 
     this.updateUI();
-    this.toggleSidebar(true);
+    this.displaySidebar(true);
   }
 
   private async startNewGame(): Promise<void> {
@@ -130,7 +131,7 @@ export class GameApp {
     }
 
     this.updateUI();
-    this.toggleSidebar(true);
+    this.displaySidebar(true);
   }
 
   private resetGame(): void {
@@ -148,7 +149,7 @@ export class GameApp {
     this.map.resetZoomBackground();
 
     // Show start new game modal again
-    this.toggleSidebar(false);
+    this.displaySidebar(false);
     this.createNewGame();
   }
 
@@ -163,13 +164,20 @@ export class GameApp {
     this.map.setInitialView(geoJSONAll);
   }
 
-  private toggleSidebar(show: boolean): void {
+  private displaySidebar(show: boolean): void {
     if (this.sidebar) {
       if (show) {
         this.sidebar.classList.remove("hidden");
       } else {
         this.sidebar.classList.add("hidden");
       }
+    }
+  }
+
+  // Collapse sidebar as default if using a small screen size
+  private checkInitialSidebarState() {
+    if (window.innerWidth <= 600) {
+      this.sidebar!.classList.add("small");
     }
   }
 
@@ -211,6 +219,11 @@ export class GameApp {
       this.startButton.addEventListener("click", () => this.handleStartGame());
     }
 
+    // Reset button
+    if (this.toggleSidebarButton) {
+      this.toggleSidebarButton.addEventListener("click", () => this.handleToggleSidebar());
+    }
+
     // Listen to click events on line-options
     if (this.lineSelections) {
       this.lineSelections.forEach((lineSelection) => {
@@ -226,6 +239,11 @@ export class GameApp {
         this.stationInput.focus();
       }
     });
+  }
+
+  private handleToggleSidebar(): void {
+    this.sidebar!.classList.toggle("small");
+    this.updateUI();
   }
 
   private handleStartGame(): void {
@@ -358,53 +376,4 @@ export class GameApp {
     listItem.appendChild(statsElement);
     this.lineList!.appendChild(listItem);
   }
-
-  /*
-  private updateGuessList(): void {
-    if (!this.guessList) return;
-    this.guessList.innerHTML = "";
-
-    this.game
-      .getCompletedGuesses()
-      .reverse()
-      .forEach((guess) => {
-        const listItem = document.createElement("li");
-        listItem.classList.add("guess-item");
-
-        const stationName = document.createElement("span");
-        stationName.textContent = guess;
-        stationName.classList.add("station-name");
-
-        // Get all line colors for the station
-        const lineDetails = this.game.getStationLineDetails(guess);
-
-        const colorBoxes = document.createElement("div");
-        colorBoxes.style.display = "flex";
-
-        lineDetails.forEach((detail) => {
-          const colorBox = document.createElement("span");
-          colorBox.classList.add("line-color-box");
-          colorBox.style.backgroundColor = detail.color;
-
-          // This part could probably be moved to a more central place
-          let iconName = "rail.svg";
-          if (detail.type == LineType.Metro) {
-            iconName = "metro.svg";
-          }
-
-          const icon = document.createElement("img");
-          icon.src = `./icons/${iconName}`;
-          icon.classList.add("line-color-icon");
-
-          colorBox.appendChild(icon);
-          colorBoxes.appendChild(colorBox);
-        });
-
-        listItem.appendChild(stationName);
-        listItem.appendChild(colorBoxes);
-
-        this.guessList!.appendChild(listItem);
-      });
-  }
-      */
 }
