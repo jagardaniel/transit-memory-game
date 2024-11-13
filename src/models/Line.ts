@@ -15,6 +15,7 @@ const stationCorrections: Record<string, string> = {
   // Pendeltåg
   "uppsala centrum": "Uppsala C",
   "arlanda central": "Arlanda C",
+  "stockholm södra": "Stockholm södra",
 
   // Spårväg City
   "nordiska museet": "Nordiska museet/Vasamuseet",

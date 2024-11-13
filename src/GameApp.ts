@@ -11,6 +11,7 @@ import { MapManager } from "./MapManager";
 import { Game, GuessResult } from "./models/Game";
 import { lineLoaders } from "./LineSetup";
 import { FeatureCollection } from "geojson";
+import { LineType } from "./models/Line";
 
 export class GameApp {
   private game: Game;
@@ -323,8 +324,39 @@ export class GameApp {
       .reverse()
       .forEach((guess) => {
         const listItem = document.createElement("li");
-        listItem.classList.add("guess-item"); // Optional class for styling
-        listItem.textContent = guess;
+        listItem.classList.add("guess-item");
+
+        const stationName = document.createElement("span");
+        stationName.textContent = guess;
+        stationName.classList.add("station-name");
+
+        // Get all line colors for the station
+        const lineDetails = this.game.getStationLineDetails(guess);
+
+        const colorBoxes = document.createElement("div");
+        colorBoxes.style.display = "flex";
+
+        lineDetails.forEach((detail) => {
+          const colorBox = document.createElement("span");
+          colorBox.classList.add("line-color-box");
+          colorBox.style.backgroundColor = detail.color;
+
+          // This part could probably be moved to a more central place
+          let iconName = "rail.svg";
+          if (detail.type == LineType.Metro) {
+            iconName = "metro.svg";
+          }
+
+          const icon = document.createElement("img");
+          icon.src = `./icons/${iconName}`;
+          icon.classList.add("line-color-icon");
+
+          colorBox.appendChild(icon);
+          colorBoxes.appendChild(colorBox);
+        });
+
+        listItem.appendChild(stationName);
+        listItem.appendChild(colorBoxes);
 
         this.guessList!.appendChild(listItem);
       });

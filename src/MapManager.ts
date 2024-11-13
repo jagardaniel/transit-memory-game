@@ -123,7 +123,15 @@ export class MapManager {
           type: "circle",
           source: baseName,
           paint: {
-            "circle-radius": 4,
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              8,
+              3, // At zoom level 8, the radius is 3
+              12,
+              4, // At zoom level 12, the radius is 4
+            ],
             "circle-color": [
               "case",
               ["boolean", ["get", "guessed"], false],
@@ -164,7 +172,7 @@ export class MapManager {
             "text-halo-blur": 1,
           },
           filter: ["==", ["get", "guessed"], true],
-          minzoom: 11, // This is updated by setInitialView later
+          minzoom: 11, // This can be updated by setInitialView later
         });
       } else {
         console.error(`GeoJSON data for line "${line.getName()}" is undefined.`);
@@ -258,7 +266,7 @@ export class MapManager {
 
     if (overallBounds) {
       // Zoom to fit on the map
-      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 12 });
+      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 13 });
 
       // Get zoom level after the animation is done from fitBounds
       this.map.once("moveend", () => {
@@ -268,7 +276,8 @@ export class MapManager {
         const labelZoomLevel = fittingZoomLevel + 0.2;
         const allLayers = this.map.getStyle().layers;
 
-        if (allLayers) {
+        // Only adjust label zoom level if the initial zoom level is lower than 11
+        if (fittingZoomLevel < 11 && allLayers) {
           allLayers.forEach((layer) => {
             if (layer.id.includes("labels")) {
               this.map.setLayerZoomRange(layer.id, labelZoomLevel, 24);
