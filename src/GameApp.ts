@@ -199,6 +199,18 @@ export class GameApp {
     await this.map.initializeMap();
   }
 
+  private showNotification(message: string, duration: number = 2000) {
+    const notification = document.querySelector("#notification") as HTMLElement;
+
+    notification.textContent = message;
+    notification.classList.remove("hidden");
+
+    // Remove the notification after the specified duration
+    setTimeout(() => {
+      notification.classList.add("hidden");
+    }, duration);
+  }
+
   private setupEventListeners(): void {
     // If someone presses enter in the guess input field
     if (this.stationInput) {
@@ -211,9 +223,14 @@ export class GameApp {
     }
 
     // Reset button
-    const resetButton = document.querySelector<HTMLButtonElement>("#menu-reset");
-    if (resetButton) {
-      resetButton.addEventListener("click", () => this.handleReset());
+    const menuReset = document.querySelector<HTMLButtonElement>("#menu-reset");
+    if (menuReset) {
+      menuReset.addEventListener("click", () => this.handleReset());
+    }
+
+    const menuCopy = document.querySelector<HTMLButtonElement>("#menu-copy");
+    if (menuCopy) {
+      menuCopy.addEventListener("click", () => this.handleCopyStats());
     }
 
     // Start new game button
@@ -262,6 +279,43 @@ export class GameApp {
 
   private handleStartGame(): void {
     this.startNewGame();
+  }
+
+  private handleCopyStats(): void {
+    // Sort the line list the same way as in the sidebar. This is duplicate code from updateLineList
+    const lines = this.game.getLines();
+    const metroLines = lines.filter((line) => line.getType() === "metro").sort((a, b) => b.getStations().length - a.getStations().length);
+    const otherLines = lines.filter((line) => line.getType() !== "metro").sort((a, b) => b.getStations().length - a.getStations().length);
+
+    // Combine grouped and sorted lines
+    const sortedLines = [...metroLines, ...otherLines];
+
+    let textToCopy = "";
+
+    sortedLines.forEach((line) => {
+      const lineStats = this.game.getLineStats(line.getName());
+      const lineName = line.getName();
+
+      if (lineStats) {
+        textToCopy += `${lineName}: ${lineStats.completedGuesses}/${lineStats.totalStations}\n`;
+      }
+    });
+
+    // Add total stats
+    const completedGuesses = this.game.getCompletedGuesses().length;
+    const allStations = this.game.getStations().length;
+
+    textToCopy += `\nTotalt: ${completedGuesses}/${allStations}`;
+
+    // Copy to clipboard
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        this.showNotification("Nuvarande resultat kopierat till urklippet!", 3000);
+      })
+      .catch((error) => {
+        console.error("Misslyckades med att kopiera till urklippet:", error);
+      });
   }
 
   private handleLineSelection(lineSelection: HTMLDivElement): void {
