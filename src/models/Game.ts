@@ -142,6 +142,15 @@ export class Game {
     return null;
   }
 
+  public solve(): void {
+    // Find the remaining stations that has not been guessed
+    const allStations = this.getStations();
+    const remainingStations = allStations.filter((station) => !this.completedGuesses.has(station));
+
+    // Add each station to completed guesses - you just solved the game!
+    remainingStations.forEach((station) => this.completedGuesses.add(station));
+  }
+
   public getLines(): Line[] {
     return this.lines;
   }

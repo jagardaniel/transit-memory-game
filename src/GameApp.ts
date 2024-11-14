@@ -222,15 +222,22 @@ export class GameApp {
       });
     }
 
-    // Reset button
+    // Reset game from menu
     const menuReset = document.querySelector<HTMLButtonElement>("#menu-reset");
     if (menuReset) {
       menuReset.addEventListener("click", () => this.handleReset());
     }
 
+    // Copy result to clipboard
     const menuCopy = document.querySelector<HTMLButtonElement>("#menu-copy");
     if (menuCopy) {
       menuCopy.addEventListener("click", () => this.handleCopyStats());
+    }
+
+    // Solve game
+    const menuSolve = document.querySelector<HTMLButtonElement>("#menu-solve");
+    if (menuSolve) {
+      menuSolve.addEventListener("click", () => this.handleSolveGame());
     }
 
     // Start new game button
@@ -238,7 +245,7 @@ export class GameApp {
       this.startButton.addEventListener("click", () => this.handleStartGame());
     }
 
-    // Reset button
+    // Toggle sidebar size
     if (this.toggleSidebarButton) {
       this.toggleSidebarButton.addEventListener("click", () => this.handleToggleSidebar());
     }
@@ -279,6 +286,30 @@ export class GameApp {
 
   private handleStartGame(): void {
     this.startNewGame();
+  }
+
+  private handleSolveGame(): void {
+    const completedGuesses = this.game.getCompletedGuesses().length;
+    const allStations = this.game.getStations().length;
+    const stationsRemaining = allStations - completedGuesses;
+
+    if (stationsRemaining == 0) {
+      this.showNotification("Du har redan hittat alla stationer!", 3000);
+      return;
+    }
+
+    const solve = confirm(
+      `Vissa kallar detta fusk, andra att "jobba smart". Är du säker på att du vill lösa spelet med ${stationsRemaining} stationer kvar?`
+    );
+    if (solve) {
+      this.game.solve();
+
+      // Save to local storage
+      saveCompletedGuesses(this.game.getCompletedGuesses());
+
+      this.map.markAllStationsAsGuessed();
+      this.updateUI();
+    }
   }
 
   private handleCopyStats(): void {

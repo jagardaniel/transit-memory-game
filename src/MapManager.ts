@@ -209,6 +209,17 @@ export class MapManager {
     });
   }
 
+  public markAllStationsAsGuessed(): void {
+    const lines = this.game.getLines();
+
+    for (const line of lines) {
+      for (const station of line.getStations()) {
+        line.markStationAsGuessed(station);
+      }
+      this.updateGeoJSON(line);
+    }
+  }
+
   public resetMap(): void {
     // Remove source and layers except for the base tiles
     const allLayers = this.map.getStyle().layers;
