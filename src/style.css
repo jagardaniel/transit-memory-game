@@ -70,12 +70,85 @@ button {
 }
 
 #search {
-  display: none;
   position: absolute;
   top: 2%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
+  display: flex;
+  width: 400px;
+}
+
+#search.hidden {
+  display: none;
+}
+
+.search-input {
+  flex: 0 0 85%;
+}
+
+.search-menu {
+  flex: 0 0 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  border: 1px solid rgba(85, 85, 85, 0.5);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.search-menu:hover {
+  background: #f6f6f6;
+  cursor: pointer;
+}
+
+.search-menu img {
+  width: 20px;
+  height: 20px;
+}
+
+.search-input input {
+  width: 100%;
+  height: 45px;
+  padding-left: 43px;
+  font-size: 1rem;
+  border: 1px solid rgba(85, 85, 85, 0.5);
+  border-radius: 10px;
+  color: #363636;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  /* Icon inside text form */
+  background-image: url("/icons/train.svg");
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown-menu a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.show-dropdown .dropdown-menu {
+  display: flex;
 }
 
 #sidebar {
@@ -157,23 +230,6 @@ button {
 .line-color-icon {
   width: 14px;
   height: 14px;
-}
-
-/* Input text form at the top */
-.station-input {
-  width: 380px;
-  height: 45px;
-  padding-left: 43px;
-  font-size: 1rem;
-  border: 1px solid rgba(85, 85, 85, 0.5);
-  border-radius: 10px;
-  color: #363636;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-  /* Icon inside text form */
-  background-image: url("/icons/train.svg");
-  background-repeat: no-repeat;
-  background-position: 10px center;
 }
 
 /* Modal displayed for new games */
@@ -399,5 +455,10 @@ button {
   .stats-element {
     font-size: 0.7rem;
     padding: 3px 6px;
+  }
+
+  .dropdown-menu a {
+    padding: 8px;
+    font-size: 14px;
   }
 }

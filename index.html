@@ -17,12 +17,18 @@
       <ul id="guess-list"></ul>
       <!-- Temporary toggle button -->
       <button id="sidebar-button" class="sidebar-button">t</button>
-      <!-- Temporary reset button -->
-      <button id="reset-game">r</button>
     </div>
 
-    <div id="search">
-      <input type="text" id="station-input" class="station-input" placeholder="Gissa station..." autofocus />
+    <div id="search" class="hidden">
+      <div class="search-input">
+        <input type="text" id="station-input" placeholder="Gissa station..." autofocus />
+      </div>
+      <div id="search-menu" class="search-menu">
+        <img src="/icons/menu.svg" />
+      </div>
+      <div class="dropdown-menu hidden">
+        <a href="#" id="menu-reset">Nytt spel</a>
+      </div>
     </div>
 
     <!-- Modal content -->

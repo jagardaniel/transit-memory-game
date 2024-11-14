@@ -80,10 +80,8 @@ export class GameApp {
 
     this.setInitialView();
 
-    if (this.stationInput && this.searchContainer) {
-      this.searchContainer.style.display = "block";
-      this.stationInput.focus();
-    }
+    this.displaySearch(true);
+    this.stationInput!.focus();
 
     this.updateUI();
     this.displaySidebar(true);
@@ -112,11 +110,9 @@ export class GameApp {
 
     this.setInitialView();
 
-    if (this.stationInput && this.searchContainer) {
-      this.searchContainer.style.display = "block";
-      this.stationInput.value = "";
-      this.stationInput.focus();
-    }
+    this.displaySearch(true);
+    this.stationInput!.value = "";
+    this.stationInput!.focus();
 
     // Clear selections in new game modal
     this.selectedLines.clear();
@@ -139,9 +135,7 @@ export class GameApp {
     clearAll();
 
     // Hide text input form
-    if (this.searchContainer) {
-      this.searchContainer.style.display = "none";
-    }
+    this.displaySearch(false);
 
     this.game.reset();
 
@@ -162,6 +156,14 @@ export class GameApp {
       .filter((geoJSON): geoJSON is FeatureCollection => geoJSON !== undefined);
 
     this.map.setInitialView(geoJSONAll);
+  }
+
+  private displaySearch(show: boolean): void {
+    if (show) {
+      this.searchContainer!.classList.remove("hidden");
+    } else {
+      this.searchContainer!.classList.add("hidden");
+    }
   }
 
   private displaySidebar(show: boolean): void {
@@ -209,7 +211,7 @@ export class GameApp {
     }
 
     // Reset button
-    const resetButton = document.querySelector<HTMLButtonElement>("#reset-game");
+    const resetButton = document.querySelector<HTMLButtonElement>("#menu-reset");
     if (resetButton) {
       resetButton.addEventListener("click", () => this.handleReset());
     }
@@ -230,6 +232,18 @@ export class GameApp {
         lineSelection.addEventListener("click", () => this.handleLineSelection(lineSelection));
       });
     }
+
+    // Menu button to open dropdown menu
+    const menuButton = document.querySelector<HTMLDivElement>("#search-menu");
+    menuButton!.addEventListener("click", (event: MouseEvent) => {
+      event.stopPropagation();
+      this.searchContainer!.classList.toggle("show-dropdown");
+    });
+
+    // Hide dropdown on click
+    document.addEventListener("click", () => {
+      this.searchContainer!.classList.remove("show-dropdown");
+    });
   }
 
   private setupMapListeners(): void {
