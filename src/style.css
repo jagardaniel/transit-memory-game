@@ -381,11 +381,11 @@ button {
 }
 
 .wrong-guess {
-  border: 2px solid red;
+  border: 2px solid red !important;
 }
 
 .duplicate-guess {
-  border: 2px solid #e5d700;
+  border: 2px solid #e5d700 !important;
 }
 
 .notification {
