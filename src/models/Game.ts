@@ -1,4 +1,3 @@
-import { LineStats } from "../types";
 import { Line } from "./Line";
 
 export enum GuessResult {
@@ -16,20 +15,19 @@ export class Game {
     this.completedGuesses = new Set();
   }
 
-  public setInitialGuesses(guesses: string[]): void {
-    const stations = new Set(this.getStations());
-    this.completedGuesses = new Set(guesses.filter((guess) => stations.has(guess)));
-  }
-
   public setLines(newLines: Line[]): void {
     this.lines = newLines;
-    this.reset();
+    this.completedGuesses.clear();
+  }
+
+  public setCompletedGuesses(newGuesses: string[]): void {
+    const stations = new Set(this.getStations());
+    this.completedGuesses = new Set(newGuesses.filter((guess) => stations.has(guess)));
   }
 
   public makeGuess(stationName: string): GuessResult {
     // Check if the name has an alternative spelling
     const correctedName = this.lines.reduce((name, line) => line.correctStationName(name) ?? name, stationName);
-
     const station = this.getStation(correctedName);
 
     if (!station) {
@@ -42,15 +40,6 @@ export class Game {
 
     this.completedGuesses.add(station);
     return GuessResult.Success;
-  }
-
-  public getCompletedGuesses(): string[] {
-    return Array.from(this.completedGuesses);
-  }
-
-  public getLine(lineName: string): Line | null {
-    const line = this.lines.find((line) => line.getName().toLowerCase() === lineName.toLowerCase());
-    return line ?? null;
   }
 
   public getStation(stationName: string): string | null {
@@ -83,79 +72,16 @@ export class Game {
     return allStations;
   }
 
-  public getLineStats(lineName: string): LineStats | null {
-    const line = this.getLine(lineName);
-
-    if (line) {
-      const completedGuesses = line.getStations().filter((station) => this.completedGuesses.has(station)).length;
-      const totalStations = line.getStations().length;
-
-      return {
-        completedGuesses,
-        totalStations,
-      };
-    }
-
-    return null;
-  }
-
-  public getStationLineColors(stationName: string): string[] {
-    const colors: string[] = [];
-
-    for (const line of this.lines) {
-      const stationExistsOnLine = line.getStations().some((station) => station.toLowerCase() === stationName.toLowerCase());
-
-      if (stationExistsOnLine) {
-        colors.push(line.getColor());
-      }
-    }
-
-    return colors;
-  }
-
-  public getStationLineDetails(stationName: string): Array<{ color: string; type: string }> {
-    let lineObjects = [];
-
-    for (const line of this.lines) {
-      const stationExistsOnLine = line.getStations().some((station) => station.toLowerCase() === stationName.toLowerCase());
-
-      if (stationExistsOnLine) {
-        lineObjects.push({ color: line.getColor(), type: line.getType() });
-      }
-    }
-
-    return lineObjects;
-  }
-
-  // Get a lines flyToZoomLevel by station name. A station can exist on multiple lines
-  // but they should always be pretty similar so just return the first one we can find
-  public getFlyToZoomLevel(stationName: string): number | null {
-    for (const line of this.getLines()) {
-      const stations = line.getStations();
-
-      const station = stations.find((station) => station === stationName);
-      if (station) {
-        return line.getFlyToZoomLevel();
-      }
-    }
-
-    return null;
-  }
-
-  public solve(): void {
-    // Find the remaining stations that has not been guessed
-    const allStations = this.getStations();
-    const remainingStations = allStations.filter((station) => !this.completedGuesses.has(station));
-
-    // Add each station to completed guesses - you just solved the game!
-    remainingStations.forEach((station) => this.completedGuesses.add(station));
-  }
-
   public getLines(): Line[] {
     return this.lines;
   }
 
-  public reset(): void {
+  public getCompletedGuesses(): string[] {
+    return Array.from(this.completedGuesses);
+  }
+
+  public clear(): void {
     this.completedGuesses.clear();
+    this.lines = [];
   }
 }

@@ -2,7 +2,7 @@
 
 A station name guessing game for the Swedish public transport system. Very inspired by [London Tube Memory Game](https://london.metro-memory.com/) and [light-rail-game](https://github.com/simonprickett/light-rail-game).
 
-Currently supported lines (in Stockholm):
+Currently supported lines (Stockholm):
 
 - Tunnelbanan (gröna, blå, röda)
 - Pendeltåg
@@ -14,7 +14,7 @@ Currently supported lines (in Stockholm):
 
 ## Description
 
-TypeScript application created with [vite](https://vite.dev/) (vanilla-ts). [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) for displaying the interactive map with data from [OpenStreetMap](https://www.openstreetmap.or). Tiles without labels from [Carto](https://carto.com/). [Overpass-turbo](https://overpass-turbo.eu/) used to query OpenStreetMap data and export it to GeoJSON.
+Svelte application created with [vite](https://vite.dev/) (svelte-ts). [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) displays the interactive map with data from [OpenStreetMap](https://www.openstreetmap.or). Tiles without labels from [Carto](https://carto.com/). [Overpass-turbo](https://overpass-turbo.eu/) used to query OpenStreetMap data and export it to GeoJSON.
 
 [ChatGPT](https://chatgpt.com/) and old [Stack Overflow](https://stackoverflow.com/) posts has made this project possible.
 

@@ -1,9 +1,18 @@
-import { Feature, FeatureCollection, Point } from "geojson";
+import type { Feature, FeatureCollection, Point } from "geojson";
+
+export enum LineType {
+  CommuterRail = "commuter-rail",
+  LightRail = "light-rail",
+  Metro = "metro",
+  Tram = "tram",
+}
+
+export enum LineCity {
+  Stockholm = "Stockholm",
+}
 
 // Alternative spelling for stations.
-// Since the list will not be too long it is probably easier to just keep it
-// more centralized instead of specifying each alternatives for every line.
-// Should probably be placed in a different file though.
+// Should probably be in another file
 const stationCorrections: Record<string, string> = {
   "t centralen": "T-Centralen",
   centralen: "T-Centralen",
@@ -28,71 +37,51 @@ const stationCorrections: Record<string, string> = {
   "stockholm östra": "Stockholms Östra",
 };
 
-export enum LineType {
-  CommuterRail = "commuter-rail",
-  LightRail = "light-rail",
-  Metro = "metro",
-  Tram = "tram",
-}
-
 export class Line {
   private name: string;
   private shortName: string;
+  private city: LineCity;
   private color: string;
   private type: LineType;
-  private flyToZoomLevel: number; // Level to zoom into a station on this line
-  private geoJSONData?: FeatureCollection;
+  private geoJSONData: FeatureCollection;
 
-  private constructor(name: string, shortName: string, color: string, type: LineType, flyToZoomLevel: number, geoJSONData: FeatureCollection) {
+  constructor(name: string, shortName: string, city: LineCity, color: string, type: LineType, geoJSONData: FeatureCollection) {
     this.name = name;
     this.shortName = shortName;
+    this.city = city;
     this.color = color;
     this.type = type;
-    this.flyToZoomLevel = flyToZoomLevel;
     this.geoJSONData = geoJSONData;
   }
 
-  public getName(): string {
-    return this.name;
-  }
+  // It looks like the constructor can't be async so this is what ChatGPT recommended
+  public static async create(name: string, shortName: string, city: LineCity, color: string, type: LineType): Promise<Line> {
+    // GeoJSON file has to be placed in public/geojson/<city>/<type>/<shortName>.geojson
+    // Example: public/geojson/stockholm/metro/red.geojson
+    const filePath = `./geojson/${city.toLowerCase()}/${type}/${shortName}.geojson`;
+    const response = await fetch(filePath);
 
-  public getShortName(): string {
-    return this.shortName;
-  }
+    if (!response.ok) {
+      throw new Error(`Failed to load GeoJSON data from ${filePath}`);
+    }
 
-  public getColor(): string {
-    return this.color;
-  }
-
-  public getType(): LineType {
-    return this.type;
-  }
-
-  public getFlyToZoomLevel(): number {
-    return this.flyToZoomLevel;
-  }
-
-  public getCorrections(): Record<string, string> {
-    return stationCorrections;
-  }
-
-  public getGeoJSONData(): FeatureCollection | undefined {
-    return this.geoJSONData;
+    const geoJSONData: FeatureCollection = await response.json();
+    return new Line(name, shortName, city, color, type, geoJSONData);
   }
 
   public getStations(): string[] {
-    if (!this.geoJSONData) return [];
-
     return this.geoJSONData.features
       .filter((feature) => feature.geometry.type === "Point" && feature.properties?.name)
       .map((feature) => feature.properties!.name as string);
   }
 
+  // Check if the station name has an alternative spelling
+  public correctStationName(stationName: string): string | null {
+    return stationCorrections[stationName.toLowerCase()] ?? null;
+  }
+
   private findStationFeature(stationName: string): Feature | undefined {
-    if (this.geoJSONData) {
-      return this.geoJSONData.features.find((feature: Feature) => feature.geometry.type === "Point" && feature.properties?.name === stationName);
-    }
-    return undefined;
+    return this.geoJSONData.features.find((feature: Feature) => feature.geometry.type === "Point" && feature.properties?.name === stationName);
   }
 
   public markStationAsGuessed(stationName: string): void {
@@ -102,16 +91,6 @@ export class Line {
       if (feature.properties) {
         feature.properties.guessed = true;
       }
-    }
-  }
-
-  public resetGuessedStations(): void {
-    if (this.geoJSONData) {
-      this.geoJSONData.features.forEach((feature: Feature) => {
-        if (feature.geometry.type === "Point" && feature.properties) {
-          feature.properties.guessed = false;
-        }
-      });
     }
   }
 
@@ -125,23 +104,43 @@ export class Line {
     return undefined;
   }
 
-  // Check if the station name has an alternative spelling
-  public correctStationName(stationName: string): string | null {
-    return stationCorrections[stationName.toLowerCase()] ?? null;
+  public resetGuessedStations(): void {
+    this.geoJSONData.features.forEach((feature: Feature) => {
+      if (feature.geometry.type === "Point" && feature.properties) {
+        feature.properties.guessed = false;
+      }
+    });
   }
 
-  // Static async factory method to create a Line instance
-  public static async create(name: string, shortName: string, color: string, type: LineType, flyToZoomLevel: number = 13.5): Promise<Line> {
-    // GeoJSON file has to be placed in public/geojson/<LineTyp>/<Line.getShortName()>.geojson
-    // Example: public/geojson/metro/red.geojson
-    const geoJSONPath = `./geojson/${type}/${shortName}.geojson`;
-    const response = await fetch(geoJSONPath);
-    if (!response.ok) {
-      throw new Error(`Failed to load GeoJSON data from ${geoJSONPath}`);
-    }
+  public getName(): string {
+    return this.name;
+  }
 
-    const geoJSONData: FeatureCollection = await response.json();
+  public getShortName(): string {
+    return this.shortName;
+  }
 
-    return new Line(name, shortName, color, type, flyToZoomLevel, geoJSONData);
+  public getCity(): LineCity {
+    return this.city;
+  }
+
+  public getColor(): string {
+    return this.color;
+  }
+
+  public getType(): LineType {
+    return this.type;
+  }
+
+  public getGeoJSONData(): FeatureCollection {
+    return this.geoJSONData;
+  }
+
+  public getCorrections(): Record<string, string> {
+    return stationCorrections;
+  }
+
+  public getBaseName(): string {
+    return `${this.getShortName()}-${this.getType()}`;
   }
 }

@@ -5,7 +5,7 @@
 		<image  width="32" height="32" id="img2" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAXRQTFRFAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8HZcRAAAAHx0Uk5TAAAKHjFAS1JYXF1ZVU5EOigTAwUwWqHT6vv/9N/BfEIQAS+q9f3WWwgEX+v8kEr3/rbh9j4pLPnoPeYa5BjtYFH67PKRQ3Hvhz937mGEHxnl+DYL3UE3YpbYEdLnVg1G1LDj3NkiNRuKmzyUerUdOw99BgfzxCfxnmZjFlV08WAAAAGGSURBVHic1ZNPS0JBFMXPVdHKwn8gkiWawtNFgYgItQhaVDuhQoLW0VboM0TRooVfIQiCaOEq3AhFRkUKJZRRJIhlSUULLaJ6zct5+gJ1XQdmuHPPj+EOnCH8iOqCqOLVU81hyyJ7CtU6eQlwsaKKZtIz54J8RM9NbUlmKtIQlVv6gPWV/PdtfMBGNhWs6hf5zIb5fQIF7vDVJz+AqAAHfchAkQNO2ucdn7aMAdqTgd4/BHgozTsBysFbKshADwfa6v8ALDSXAp0p2oLuU0OU4YBeuD4HuoO5BhDI3sBVMkmApwqTO86qMB3V/RBts336QAJmUuh3bIlAJN2IrlXYZLtBLwV3dhcYvbWngtqkYoYxkmZIABNknNph6fUasgUoJY4YHw8Bj0A0X0milRzpd5bGBTotV5q41g7/ybEoxdU1rqYEQ7omeZ41mQf2hng4htrfhFntuwKG7TGxBkSz+SpCTlrjwOJb5wYwR6v12y2DoXUIoRUOqHRR6UssKQeIuNm2zNY3Wz93MREy6iAAAAAASUVORK5CYII="/>
 	</defs>
 	<style>
-		.s0 { fill: #000000 } 
+		.s0 { fill: #000000 }
 	</style>
 	<use id="Background" href="#img1" x="0" y="0"/>
 	<path id="Shape 1" class="s0" d=""/>
