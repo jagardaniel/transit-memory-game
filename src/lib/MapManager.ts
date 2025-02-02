@@ -43,9 +43,10 @@ class MapManager {
           },
         ],
       },
-      center: this.initialCenter, // Default to Stockholm
+      center: this.initialCenter,
       zoom: this.initialZoom,
       maxZoom: 15,
+      minZoom: 7,
     });
 
     // Disable map rotation
@@ -198,16 +199,26 @@ class MapManager {
 
         // Set a decent zoom level that will be used to zoom into a specific station
         this.stationZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 2 : cameraOptions.zoom + 1;
+
+        // Adjust label zoom level
+        const labelZoomLevel = cameraOptions.zoom + 0.2;
+        const allLayers = this.map.getStyle().layers;
+
+        // Modify the label layer and update the zoom level
+        if (allLayers) {
+          allLayers.forEach((layer) => {
+            if (layer.id.includes("labels")) {
+              this.map.setLayerZoomRange(layer.id, labelZoomLevel, 24);
+            }
+          });
+        }
       }
     }
   }
 
   // Fly back to the initial center and zoom
   public defaultView(): void {
-    this.map.flyTo({
-      center: this.initialCenter,
-      zoom: this.initialZoom,
-    });
+    this.flyToCoords(this.initialCenter, this.initialZoom);
   }
 
   public flyToCoords(coordinates: LngLatLike, zoom: number): void {

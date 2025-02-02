@@ -2,7 +2,7 @@
   import "maplibre-gl/dist/maplibre-gl.css";
 
   import Map from "./components/Map.svelte";
-  import { isGameStarted, selectedLines, completedGuesses } from "./lib/stores";
+  import { isGameStarted, selectedLines, completedGuesses, hasSeenIntro } from "./lib/stores";
   import StartModal from "./components/StartModal.svelte";
   import { Game, GuessResult } from "./models/Game";
   import { get } from "svelte/store";
@@ -10,6 +10,7 @@
   import { Line } from "./models/Line";
   import OverlayBar from "./components/OverlayBar.svelte";
   import { guessState } from "./lib/states.svelte";
+  import OverlayIntro from "./components/OverlayIntro.svelte";
 
   let game = $state<Game>(new Game());
   let mapComponent = $state<Map | null>(null);
@@ -144,5 +145,10 @@
   <!-- Show guess input and menu if game is started -->
   {#if $isGameStarted}
     <OverlayBar onGuess={handleGuess} onReset={resetGame} />
+  {/if}
+
+  <!-- Show introduction only if game is started and it hasn't been seen -->
+  {#if $isGameStarted && !$hasSeenIntro}
+    <OverlayIntro />
   {/if}
 </main>
