@@ -34,15 +34,6 @@
   .overlay-menu {
     flex: 0 0 10%;
     margin-left: 5px;
-    /*
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 5px;
-    border: 1px solid rgba(85, 85, 85, 0.5);
-    border-radius: 10px;
-    background: #fff;
-    */
   }
 
   .overlay-menu:hover {

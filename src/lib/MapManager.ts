@@ -6,9 +6,19 @@ class MapManager {
   private initialZoom: number;
   private initialCenter: LngLatLike;
 
+  private linesCenter: LngLatLike;
+  private linesZoom: number;
+  private stationZoom: number;
+
   constructor(container: HTMLDivElement) {
     this.initialCenter = [18.071136585570766, 59.32743910768781]; // Default to Stockholm
     this.initialZoom = 7;
+
+    // Updated later based on selected lines in setupOptions
+    // Used to set the initial view when a game is started
+    this.linesCenter = [0, 0];
+    this.linesZoom = 0;
+    this.stationZoom = 0;
 
     this.map = new maplibregl.Map({
       container: container,
@@ -42,12 +52,6 @@ class MapManager {
     this.map.dragRotate.disable();
     this.map.keyboard.disable();
     this.map.touchZoomRotate.disableRotation();
-
-    // Emit event when the user stops dragging the map
-    this.map.on("dragend", () => {
-      const event = new CustomEvent("mapDragEnd");
-      window.dispatchEvent(event);
-    });
   }
 
   public destroy(): void {
@@ -159,10 +163,11 @@ class MapManager {
     });
   }
 
-  // Create a bounding box with all the GeoJSON points and then fly to it
-  public fitView(geoJSONData: FeatureCollection[]): void {
+  // Setup options based on GeoJSON from selected lines
+  public setupOptions(geoJSONData: FeatureCollection[]): void {
     let overallBounds: LngLatBounds | null = null;
 
+    // Create a bounding box with all the GeoJSON points
     for (const data of geoJSONData) {
       const points = data.features.filter((feature: any) => feature.geometry.type === "Point").map((feature: any) => feature.geometry.coordinates);
 
@@ -180,7 +185,20 @@ class MapManager {
     }
 
     if (overallBounds) {
-      this.map.fitBounds(overallBounds, { padding: 30, maxZoom: 13 });
+      // Get zoom level and the desired center for the bounding box
+      const cameraOptions = this.map.cameraForBounds(overallBounds, {
+        padding: 30,
+        maxZoom: 13,
+      });
+
+      if (cameraOptions?.zoom !== undefined && cameraOptions?.center !== undefined) {
+        // Set center and zoom to use for the selected lines
+        this.linesCenter = cameraOptions.center;
+        this.linesZoom = cameraOptions.zoom;
+
+        // Set a decent zoom level that will be used to zoom into a specific station
+        this.stationZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 2 : cameraOptions.zoom + 1;
+      }
     }
   }
 
@@ -192,10 +210,10 @@ class MapManager {
     });
   }
 
-  public flyToCoords(coordinates: LngLatLike): void {
+  public flyToCoords(coordinates: LngLatLike, zoom: number): void {
     this.map.flyTo({
       center: coordinates,
-      zoom: 12.5,
+      zoom: zoom,
     });
   }
 
@@ -205,6 +223,18 @@ class MapManager {
     if (source) {
       (source as maplibregl.GeoJSONSource).setData(geoJSONData);
     }
+  }
+
+  public getLinesCenter(): LngLatLike {
+    return this.linesCenter;
+  }
+
+  public getLinesZoom(): number {
+    return this.linesZoom;
+  }
+
+  public getStationZoom(): number {
+    return this.stationZoom;
   }
 }
 

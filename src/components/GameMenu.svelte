@@ -1,11 +1,29 @@
 <script lang="ts">
+  import { onDestroy, onMount } from "svelte";
+
   let { onReset } = $props();
 
   let visible = $state(false);
   let dropdownRef = $state<HTMLDivElement>();
 
-  function toggleDropdown() {
+  onMount(() => {
+    document.addEventListener("click", handleClickOutside);
+  });
+
+  onDestroy(() => {
+    document.removeEventListener("click", handleClickOutside);
+  });
+
+  function toggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
     visible = !visible;
+  }
+
+  // Hide dropdown menu on click
+  function handleClickOutside(event: MouseEvent) {
+    if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+      visible = false;
+    }
   }
 </script>
 
@@ -32,6 +50,7 @@
 
   .menu-button:hover {
     background: #f0f0f0;
+    border-radius: 10px;
   }
 
   .menu-button img {
@@ -43,9 +62,8 @@
   .dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 0;
+    right: -45px;
     background: #fff;
-    /* border: 1px solid rgba(85, 85, 85, 0.5); */
     border-radius: 5px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     z-index: 100;

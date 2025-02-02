@@ -30,15 +30,15 @@
     mapManager?.clear();
   }
 
-  // Set the center/zoom to get a default view that covers all selected lines
-  export function fitView(lines: Line[]) {
+  // Set center/zoom options for selected lines
+  export function setupOptions(lines: Line[]) {
     const geoJSONData: FeatureCollection[] = [];
 
     for (const line of lines) {
       geoJSONData.push(line.getGeoJSONData());
     }
 
-    mapManager?.fitView(geoJSONData);
+    mapManager?.setupOptions(geoJSONData);
   }
 
   // Zoom back to the default view
@@ -47,13 +47,25 @@
   }
 
   // Fly to specified coordinates
-  export function flyToCoords(coordinates: LngLatLike) {
-    mapManager?.flyToCoords(coordinates);
+  export function flyToCoords(coordinates: LngLatLike, zoom: number) {
+    mapManager?.flyToCoords(coordinates, zoom);
   }
 
   // Update the source with new GeoJSON data
   export function updateGeoJSON(baseName: string, geoJSONData: FeatureCollection) {
     mapManager?.updateGeoJSON(baseName, geoJSONData);
+  }
+
+  export function getLinesCenter(): LngLatLike {
+    return mapManager!.getLinesCenter();
+  }
+
+  export function getLinesZoom(): number {
+    return mapManager!.getLinesZoom();
+  }
+
+  export function getStationZoom(): number {
+    return mapManager!.getStationZoom();
   }
 </script>
 

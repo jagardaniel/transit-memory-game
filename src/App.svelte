@@ -14,7 +14,7 @@
   let game = $state<Game>(new Game());
   let mapComponent = $state<Map | null>(null);
 
-  const isGameReady = $derived(game && mapComponent && $isGameStarted);
+  const isGameReady = $derived(mapComponent && $isGameStarted);
 
   $effect(() => {
     if (isGameReady) {
@@ -48,8 +48,9 @@
       // Draw lines and station markers on the map
       await mapComponent?.drawLines(lines);
 
-      // Fit zoom on map to cover all selected lines
-      mapComponent?.fitView(lines);
+      // Set some map options based on the selected lines and then to fly to it
+      mapComponent?.setupOptions(lines);
+      mapComponent?.flyToCoords(mapComponent.getLinesCenter(), mapComponent.getLinesZoom());
 
       // Mark completed guesses as guessed on the map
       markStationsAsGuessed(game.getCompletedGuesses());
@@ -124,7 +125,7 @@
       for (const line of lines) {
         const coordinates = line.getStationCoordinates(station);
         if (coordinates) {
-          mapComponent?.flyToCoords(coordinates);
+          mapComponent?.flyToCoords(coordinates, mapComponent.getStationZoom());
         }
       }
     }
@@ -144,26 +145,4 @@
   {#if $isGameStarted}
     <OverlayBar onGuess={handleGuess} onReset={resetGame} />
   {/if}
-
-  <!-- Temporary reset button -->
-  <button onclick={resetGame} class="reset-button">Reset Game</button>
 </main>
-
-<style>
-  .reset-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px 15px;
-    font-size: 16px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .reset-button:hover {
-    background: darkred;
-  }
-</style>
