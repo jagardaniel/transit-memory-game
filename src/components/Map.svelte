@@ -1,72 +1,21 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import MapManager from "../lib/MapManager";
-  import type { Line } from "../models/Line";
-  import type { FeatureCollection } from "geojson";
-  import type { LngLatLike } from "maplibre-gl";
+  import { mapManager } from "../lib/states.svelte";
 
   let mapContainer = $state<HTMLDivElement>();
-  let mapManager = $state<MapManager>();
+  let manager: MapManager;
 
   onMount(() => {
     if (mapContainer) {
-      mapManager = new MapManager(mapContainer);
+      manager = new MapManager(mapContainer);
+      mapManager.instance = manager;
     }
 
     return () => {
-      mapManager?.destroy();
+      mapManager.instance?.destroy();
     };
   });
-
-  // Draw GeoJSON data on the map for each selected line
-  export async function drawLines(lines: Line[]) {
-    lines.forEach((line) => {
-      mapManager?.drawGeoJSON(line.getBaseName(), line.getColor(), line.getGeoJSONData());
-    });
-  }
-
-  // Clear all GeoJSON related layers on the map
-  export function clear() {
-    mapManager?.clear();
-  }
-
-  // Set center/zoom options for selected lines
-  export function setupOptions(lines: Line[]) {
-    const geoJSONData: FeatureCollection[] = [];
-
-    for (const line of lines) {
-      geoJSONData.push(line.getGeoJSONData());
-    }
-
-    mapManager?.setupOptions(geoJSONData);
-  }
-
-  // Zoom back to the default view
-  export function defaultView() {
-    mapManager?.defaultView();
-  }
-
-  // Fly to specified coordinates
-  export function flyToCoords(coordinates: LngLatLike, zoom: number) {
-    mapManager?.flyToCoords(coordinates, zoom);
-  }
-
-  // Update the source with new GeoJSON data
-  export function updateGeoJSON(baseName: string, geoJSONData: FeatureCollection) {
-    mapManager?.updateGeoJSON(baseName, geoJSONData);
-  }
-
-  export function getLinesCenter(): LngLatLike {
-    return mapManager!.getLinesCenter();
-  }
-
-  export function getLinesZoom(): number {
-    return mapManager!.getLinesZoom();
-  }
-
-  export function getStationZoom(): number {
-    return mapManager!.getStationZoom();
-  }
 </script>
 
 <div bind:this={mapContainer}></div>

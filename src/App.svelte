@@ -9,13 +9,13 @@
   import { LINES } from "./data/Lines";
   import { Line } from "./models/Line";
   import OverlayBar from "./components/OverlayBar.svelte";
-  import { guessState } from "./lib/states.svelte";
+  import { guessState, mapManager } from "./lib/states.svelte";
   import OverlayIntro from "./components/OverlayIntro.svelte";
+  import type { FeatureCollection } from "geojson";
 
   let game = $state<Game>(new Game());
-  let mapComponent = $state<Map | null>(null);
 
-  const isGameReady = $derived(mapComponent && $isGameStarted);
+  const isGameReady = $derived(mapManager && $isGameStarted);
 
   $effect(() => {
     if (isGameReady) {
@@ -47,11 +47,11 @@
       const lines = game.getLines();
 
       // Draw lines and station markers on the map
-      await mapComponent?.drawLines(lines);
+      await drawLines(lines);
 
       // Set some map options based on the selected lines and then to fly to it
-      mapComponent?.setupOptions(lines);
-      mapComponent?.flyToCoords(mapComponent.getLinesCenter(), mapComponent.getLinesZoom());
+      setupOptions(lines);
+      mapManager.instance?.flyToCoords(mapManager.instance?.getLinesCenter(), mapManager.instance?.getLinesZoom());
 
       // Mark completed guesses as guessed on the map
       markStationsAsGuessed(game.getCompletedGuesses());
@@ -68,8 +68,8 @@
     selectedLines.set([]);
     completedGuesses.set([]);
 
-    mapComponent?.clear();
-    mapComponent?.defaultView();
+    mapManager.instance?.clear();
+    mapManager.instance?.defaultView();
   }
 
   function handleGuess() {
@@ -101,6 +101,24 @@
     setTimeout(() => (guessState.status = "default"), 400);
   }
 
+  // Draw GeoJSON data on the map for each selected line
+  async function drawLines(lines: Line[]) {
+    lines.forEach((line) => {
+      mapManager.instance?.drawGeoJSON(line.getBaseName(), line.getColor(), line.getGeoJSONData());
+    });
+  }
+
+  // Set center/zoom options for selected lines
+  function setupOptions(lines: Line[]) {
+    const geoJSONData: FeatureCollection[] = [];
+
+    for (const line of lines) {
+      geoJSONData.push(line.getGeoJSONData());
+    }
+
+    mapManager.instance?.setupOptions(geoJSONData);
+  }
+
   // Update the GeoJSON data and map source for each line
   function markStationsAsGuessed(stations: string | string[]): void {
     const stationArray = Array.isArray(stations) ? stations : [stations];
@@ -110,7 +128,7 @@
       stationArray.forEach((stationName) => {
         for (const line of lines) {
           line.markStationAsGuessed(stationName);
-          mapComponent?.updateGeoJSON(line.getBaseName(), line.getGeoJSONData());
+          mapManager.instance?.updateGeoJSON(line.getBaseName(), line.getGeoJSONData());
         }
       });
     }
@@ -126,7 +144,7 @@
       for (const line of lines) {
         const coordinates = line.getStationCoordinates(station);
         if (coordinates) {
-          mapComponent?.flyToCoords(coordinates, mapComponent.getStationZoom());
+          mapManager.instance?.flyToCoords(coordinates, mapManager.instance?.getStationZoom());
         }
       }
     }
@@ -135,7 +153,7 @@
 
 <main>
   <!-- Always display map -->
-  <Map bind:this={mapComponent} />
+  <Map />
 
   <!-- Show modal for new games -->
   {#if !$isGameStarted}
