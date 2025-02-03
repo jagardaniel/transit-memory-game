@@ -200,8 +200,10 @@ class MapManager {
         // Set a decent zoom level that will be used to zoom into a specific station
         this.stationZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 2 : cameraOptions.zoom + 1;
 
-        // Adjust label zoom level
-        const labelZoomLevel = cameraOptions.zoom + 0.2;
+        console.log(this.linesZoom);
+
+        // Adjust label zoom level if zoom is less than 11
+        const labelZoomLevel = cameraOptions.zoom < 11 ? cameraOptions.zoom + 0.2 : cameraOptions.zoom;
         const allLayers = this.map.getStyle().layers;
 
         // Modify the label layer and update the zoom level

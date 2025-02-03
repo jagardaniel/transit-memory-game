@@ -15,7 +15,7 @@
 
   let game = $state<Game>(new Game());
 
-  const isGameReady = $derived(mapManager && $isGameStarted);
+  const isGameReady = $derived(mapManager.instance && $isGameStarted);
 
   $effect(() => {
     if (isGameReady) {
