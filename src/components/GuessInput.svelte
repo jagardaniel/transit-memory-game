@@ -18,19 +18,17 @@
   }
 </script>
 
-<form>
-  <input
-    type="text"
-    class="guess-input"
-    placeholder="Gissa station"
-    bind:this={inputRef}
-    bind:value={guessState.input}
-    onkeydown={handleKeyDown}
-    class:guess-invalid={guessState.status === "invalid"}
-    class:guess-duplicate={guessState.status === "duplicate"}
-    class:shake={guessState.status !== "default"}
-  />
-</form>
+<input
+  class="guess-input"
+  type="text"
+  placeholder="Gissa station..."
+  bind:this={inputRef}
+  bind:value={guessState.input}
+  onkeydown={handleKeyDown}
+  class:guess-invalid={guessState.status === "invalid"}
+  class:guess-duplicate={guessState.status === "duplicate"}
+  class:shake={guessState.status !== "default"}
+/>
 
 <style>
   .guess-input {

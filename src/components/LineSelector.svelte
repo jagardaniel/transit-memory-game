@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { isGameStarted, selectedLines } from "../lib/stores";
-  import { LINES_MENU } from "../data/Lines";
+  import { LINES_MENU } from "../data/lines";
+  import { isGameStarted, selectedLines } from "../lib/localStorage";
   import LineOption from "./LineOption.svelte";
 
   let localSelectedLines = $state<string[]>([]);
@@ -23,7 +23,7 @@
 <div class="modal-overlay">
   <div class="modal-content">
     <h2>Nytt spel</h2>
-    <h4>Välj en eller flera linjer:</h4>
+    <p>Välj en eller flera linjer:</p>
 
     <div class="line-options">
       {#each LINES_MENU as { name, shortName, stations, color, icon }}

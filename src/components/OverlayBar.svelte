@@ -1,6 +1,6 @@
 <script lang="ts">
-  import GuessInput from "./GuessInput.svelte";
   import GameMenu from "./GameMenu.svelte";
+  import GuessInput from "./GuessInput.svelte";
 
   let { onGuess, onReset } = $props();
 </script>
@@ -34,10 +34,5 @@
   .overlay-menu {
     flex: 0 0 10%;
     margin-left: 5px;
-  }
-
-  .overlay-menu:hover {
-    background: #f6f6f6;
-    cursor: pointer;
   }
 </style>

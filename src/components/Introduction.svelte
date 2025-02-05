@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { hasSeenIntro } from "../lib/stores";
+  import { hasSeenIntro } from "../lib/localStorage";
 
   function dismissIntro() {
     hasSeenIntro.set(true);
@@ -10,8 +10,8 @@
   <div class="intro-content">
     <h2>Gissa stationer!</h2>
     <p>
-      Spelet går ut på att försöka gissa namnet på alla stationer. Skriv in ett namn på en station i fältet ovanför och tryck på enter för att gissa.
-      Rött betyder att stationen inte finns och gult att stationen redan har gissats korrekt. Lycka till!
+      Försöka gissa namnet på så många stationer som möjligt. Skriv in ett namn på en station i fältet ovanför och tryck på enter för att gissa. Rött
+      betyder att stationen inte finns eller är felstavad och gult innebär att stationen redan har gissats korrekt. Lycka till!
     </p>
     <p class="hint">(Klicka för att fortsätta)</p>
   </div>

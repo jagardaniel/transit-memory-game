@@ -34,7 +34,6 @@
 {#if visible}
   <div class="dropdown-menu" bind:this={dropdownRef}>
     <div class="dropdown-item" onclick={onReset}>Nytt spel</div>
-    <div class="dropdown-item">Kopiera resultat</div>
   </div>
 {/if}
 

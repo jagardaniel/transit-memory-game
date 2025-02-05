@@ -1,24 +1,15 @@
 import maplibregl, { LngLatBounds, type LngLatLike } from "maplibre-gl";
 import type { FeatureCollection } from "geojson";
 
-class MapManager {
+export class MapManager {
   private map: maplibregl.Map;
+
   private initialZoom: number;
   private initialCenter: LngLatLike;
-
-  private linesCenter: LngLatLike;
-  private linesZoom: number;
-  private stationZoom: number;
 
   constructor(container: HTMLDivElement) {
     this.initialCenter = [18.071136585570766, 59.32743910768781]; // Default to Stockholm
     this.initialZoom = 7;
-
-    // Updated later based on selected lines in setupOptions
-    // Used to set the initial view when a game is started
-    this.linesCenter = [0, 0];
-    this.linesZoom = 0;
-    this.stationZoom = 0;
 
     this.map = new maplibregl.Map({
       container: container,
@@ -81,7 +72,11 @@ class MapManager {
     }
   }
 
-  public drawGeoJSON(baseName: string, lineColor: string, geoJSONData: FeatureCollection) {
+  public initialView(): void {
+    this.flyToCoords(this.initialCenter, this.initialZoom);
+  }
+
+  public drawGeoJSON(baseName: string, lineColor: string, geoJSONData: FeatureCollection): void {
     // Add source layer
     this.map.addSource(baseName, {
       type: "geojson",
@@ -142,6 +137,18 @@ class MapManager {
       filter: ["==", "$type", "Point"],
     });
 
+    // Set a minimum zoom level for the station markers. Based on how much "area" the lines covers.
+    // Definitely not perfect right now, should be adjusted in the future.
+    let minZoom = 10;
+
+    const bounds = this.getBounds(geoJSONData);
+    if (bounds) {
+      const cameraOptions = this.getCameraForBounds(bounds);
+      if (cameraOptions) {
+        minZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 0.1 : cameraOptions.zoom;
+      }
+    }
+
     // Draw text labels for stations. Only visible if guessed property is set to true
     this.map.addLayer({
       id: baseName + "-labels",
@@ -160,71 +167,16 @@ class MapManager {
         "text-halo-blur": 1,
       },
       filter: ["==", ["get", "guessed"], true],
-      minzoom: 11,
+      minzoom: minZoom,
     });
   }
 
-  // Setup options based on GeoJSON from selected lines
-  public setupOptions(geoJSONData: FeatureCollection[]): void {
-    let overallBounds: LngLatBounds | null = null;
-
-    // Create a bounding box with all the GeoJSON points
-    for (const data of geoJSONData) {
-      const points = data.features.filter((feature: any) => feature.geometry.type === "Point").map((feature: any) => feature.geometry.coordinates);
-
-      if (points.length > 0) {
-        const bounds = new LngLatBounds(points[0], points[0]);
-        points.forEach((point: [number, number]) => bounds.extend(point));
-
-        // Merge bounds into the overall bounds
-        if (overallBounds) {
-          overallBounds.extend(bounds);
-        } else {
-          overallBounds = bounds;
-        }
-      }
-    }
-
-    if (overallBounds) {
-      // Get zoom level and the desired center for the bounding box
-      const cameraOptions = this.map.cameraForBounds(overallBounds, {
-        padding: 30,
-        maxZoom: 13,
-      });
-
-      if (cameraOptions?.zoom !== undefined && cameraOptions?.center !== undefined) {
-        // Set center and zoom to use for the selected lines
-        this.linesCenter = cameraOptions.center;
-        this.linesZoom = cameraOptions.zoom;
-
-        // Set a decent zoom level that will be used to zoom into a specific station
-        this.stationZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 2 : cameraOptions.zoom + 1;
-
-        // Adjust label zoom level if zoom is less than 11
-        const labelZoomLevel = cameraOptions.zoom < 11 ? cameraOptions.zoom + 0.2 : cameraOptions.zoom;
-        const allLayers = this.map.getStyle().layers;
-
-        // Modify the label layer and update the zoom level
-        if (allLayers) {
-          allLayers.forEach((layer) => {
-            if (layer.id.includes("labels")) {
-              this.map.setLayerZoomRange(layer.id, labelZoomLevel, 24);
-            }
-          });
-        }
-      }
-    }
-  }
-
-  // Fly back to the initial center and zoom
-  public defaultView(): void {
-    this.flyToCoords(this.initialCenter, this.initialZoom);
-  }
-
+  // Use the fly effect to zoom into coordinates with a specific zoom level
   public flyToCoords(coordinates: LngLatLike, zoom: number): void {
     this.map.flyTo({
       center: coordinates,
       zoom: zoom,
+      essential: true,
     });
   }
 
@@ -236,17 +188,57 @@ class MapManager {
     }
   }
 
-  public getLinesCenter(): LngLatLike {
-    return this.linesCenter;
+  // Create a bounding box based on the Point coordinates from the GeoJSON data
+  public getBounds(geoJSONData: FeatureCollection): LngLatBounds | null {
+    const bounds = new maplibregl.LngLatBounds();
+    let hasPoints = false;
+
+    geoJSONData.features.forEach((feature) => {
+      if (feature.geometry.type === "Point") {
+        bounds.extend(feature.geometry.coordinates as [number, number]);
+        hasPoints = true;
+      }
+    });
+
+    return hasPoints ? bounds : null;
   }
 
-  public getLinesZoom(): number {
-    return this.linesZoom;
+  // Merge multiple bounding boxes from GeoJSON data
+  public getMergedBounds(featureCollections: FeatureCollection[]): LngLatBounds | null {
+    const overallBounds = new maplibregl.LngLatBounds();
+    let hasValidBounds = false;
+
+    featureCollections.forEach((geoJSONData) => {
+      const bounds = this.getBounds(geoJSONData);
+      if (bounds) {
+        overallBounds.extend(bounds.getSouthWest());
+        overallBounds.extend(bounds.getNorthEast());
+        hasValidBounds = true;
+      }
+    });
+
+    return hasValidBounds ? overallBounds : null;
   }
 
-  public getStationZoom(): number {
-    return this.stationZoom;
+  // Get the desired center and zoom level for a bounding box
+  public getCameraForBounds(bounds: LngLatBounds): { center: LngLatLike; zoom: number } | null {
+    const cameraOptions = this.map.cameraForBounds(bounds, {
+      padding: 30,
+      maxZoom: 13,
+    });
+
+    if (!cameraOptions?.center || cameraOptions.zoom === undefined) return null;
+
+    return {
+      center: cameraOptions.center,
+      zoom: cameraOptions.zoom,
+    };
+  }
+
+  public getStationZoomForBounds(bounds: LngLatBounds): number | null {
+    const cameraOptions = this.getCameraForBounds(bounds);
+    if (!cameraOptions) return null;
+
+    return cameraOptions.zoom < 11 ? cameraOptions.zoom + 2 : cameraOptions.zoom + 1;
   }
 }
-
-export default MapManager;

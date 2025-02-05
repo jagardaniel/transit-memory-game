@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import MapManager from "../lib/MapManager";
+  import { MapManager } from "../lib/MapManager";
   import { mapManager } from "../lib/states.svelte";
 
-  let mapContainer = $state<HTMLDivElement>();
+  let mapContainer: HTMLDivElement;
   let manager: MapManager;
 
   onMount(() => {

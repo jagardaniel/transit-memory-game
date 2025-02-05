@@ -1,4 +1,4 @@
-import { LineCity, LineType } from "../models/Line";
+import { LineCity, LineType } from "../lib/Line";
 
 export const LINES_MENU = [
   {

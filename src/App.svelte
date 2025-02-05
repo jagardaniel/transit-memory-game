@@ -2,18 +2,16 @@
   import "maplibre-gl/dist/maplibre-gl.css";
 
   import Map from "./components/Map.svelte";
-  import { isGameStarted, selectedLines, completedGuesses, hasSeenIntro } from "./lib/stores";
-  import StartModal from "./components/StartModal.svelte";
-  import { Game, GuessResult } from "./models/Game";
-  import { get } from "svelte/store";
-  import { LINES } from "./data/Lines";
-  import { Line } from "./models/Line";
+  import { completedGuesses, hasSeenIntro, isGameStarted, selectedLines } from "./lib/localStorage";
+  import { game, guessState, mapManager } from "./lib/states.svelte";
   import OverlayBar from "./components/OverlayBar.svelte";
-  import { guessState, mapManager } from "./lib/states.svelte";
-  import OverlayIntro from "./components/OverlayIntro.svelte";
+  import { LINES } from "./data/lines";
+  import { Line } from "./lib/Line";
+  import { get } from "svelte/store";
   import type { FeatureCollection } from "geojson";
-
-  let game = $state<Game>(new Game());
+  import { GuessResult } from "./lib/Game";
+  import LineSelector from "./components/LineSelector.svelte";
+  import Introduction from "./components/Introduction.svelte";
 
   const isGameReady = $derived(mapManager.instance && $isGameStarted);
 
@@ -23,45 +21,31 @@
     }
   });
 
-  async function addLines(lineNames: string[]) {
-    const linesToLoad = lineNames.flatMap((lineKey) => {
-      const availableLines = LINES[lineKey as keyof typeof LINES];
-
-      return availableLines?.map((line) => Line.create(line.name, line.shortName, line.city, line.color, line.type));
-    });
-
-    const loadedLines = await Promise.all(linesToLoad);
-    game.setLines(loadedLines);
-  }
-
   async function loadGame() {
     const linesName = get(selectedLines);
 
     if (linesName.length > 0) {
-      // Load selected lines
-      await addLines(linesName);
+      // Set selected lines
+      await setLines(linesName);
 
       // Set completed guesses from local storage
-      game.setCompletedGuesses(get(completedGuesses));
+      game.instance.setCompletedGuesses(get(completedGuesses));
 
-      const lines = game.getLines();
+      const lines = game.instance.getLines();
 
       // Draw lines and station markers on the map
-      await drawLines(lines);
+      drawLines(lines);
 
-      // Set some map options based on the selected lines and then to fly to it
-      setupOptions(lines);
-      mapManager.instance?.flyToCoords(mapManager.instance?.getLinesCenter(), mapManager.instance?.getLinesZoom());
+      // Find initial view that fit all selected lines
+      flyToFitView(lines);
 
       // Mark completed guesses as guessed on the map
-      markStationsAsGuessed(game.getCompletedGuesses());
-    } else {
-      console.error("No lines selected. This should not be happening.");
+      markStationsAsGuessed(game.instance.getCompletedGuesses());
     }
   }
 
   function resetGame() {
-    game.clear();
+    game.instance.clear();
     guessState.input = "";
 
     isGameStarted.set(false);
@@ -69,25 +53,83 @@
     completedGuesses.set([]);
 
     mapManager.instance?.clear();
-    mapManager.instance?.defaultView();
+    mapManager.instance?.initialView();
+  }
+
+  // Add lines to the game if they exist in LINES
+  async function setLines(lineNames: string[]) {
+    const linesToLoad = lineNames.flatMap((lineKey) => {
+      const availableLines = LINES[lineKey as keyof typeof LINES];
+
+      return availableLines?.map((line) => Line.create(line.name, line.shortName, line.city, line.color, line.type));
+    });
+
+    const loadedLines = await Promise.all(linesToLoad);
+    game.instance.setLines(loadedLines);
+  }
+
+  // Draw GeoJSON data on the map for each selected line
+  function drawLines(lines: Line[]) {
+    lines.forEach((line) => {
+      mapManager.instance?.drawGeoJSON(line.getBaseName(), line.getColor(), line.getGeoJSONData());
+    });
+  }
+
+  // Fly to a map view that covers all selected lines
+  function flyToFitView(lines: Line[]) {
+    const geoJSONData: FeatureCollection[] = lines.map((line) => line.getGeoJSONData());
+
+    // Get the overall bounding box based on the GeoJSON data from all selected lines
+    const boundingBox = mapManager.instance?.getMergedBounds(geoJSONData);
+    if (!boundingBox) return;
+
+    // Get desired center and zoom level for the bounding box
+    const view = mapManager.instance?.getCameraForBounds(boundingBox);
+    if (!view) return;
+
+    mapManager.instance?.flyToCoords(view.center, view.zoom);
+  }
+
+  function flyToStation(station: string) {
+    const lines = game.instance.getLines();
+
+    // A station can exist on multiple lines but since they should be very close together
+    // finding the first match should be enough
+    if (lines) {
+      for (const line of lines) {
+        const coordinates = line.getStationCoordinates(station);
+
+        if (coordinates) {
+          // Get the appropriate zoom level for the station based on the line it belongs to
+          const bounds = mapManager.instance?.getBounds(line.getGeoJSONData());
+          if (!bounds) return;
+
+          const zoom = mapManager.instance?.getStationZoomForBounds(bounds);
+          if (!zoom) return;
+
+          mapManager.instance?.flyToCoords(coordinates, zoom);
+
+          return;
+        }
+      }
+    }
   }
 
   function handleGuess() {
     const guess = guessState.input.trim();
-    const result = game.makeGuess(guess);
+    const result = game.instance.makeGuess(guess);
 
     if (result === GuessResult.Success) {
       // Update completed guesses to local storage
-      completedGuesses.set(game.getCompletedGuesses());
+      completedGuesses.set(game.instance.getCompletedGuesses());
 
       // Clear input form
       guessState.input = "";
 
       // Get the "real" case sensitive name
-      const station = game.getStation(guess);
+      const station = game.instance.getStation(guess);
 
       if (station) {
-        // Mark station as guessed and zoom in
         markStationsAsGuessed(station);
         flyToStation(station);
       }
@@ -101,28 +143,10 @@
     setTimeout(() => (guessState.status = "default"), 400);
   }
 
-  // Draw GeoJSON data on the map for each selected line
-  async function drawLines(lines: Line[]) {
-    lines.forEach((line) => {
-      mapManager.instance?.drawGeoJSON(line.getBaseName(), line.getColor(), line.getGeoJSONData());
-    });
-  }
-
-  // Set center/zoom options for selected lines
-  function setupOptions(lines: Line[]) {
-    const geoJSONData: FeatureCollection[] = [];
-
-    for (const line of lines) {
-      geoJSONData.push(line.getGeoJSONData());
-    }
-
-    mapManager.instance?.setupOptions(geoJSONData);
-  }
-
-  // Update the GeoJSON data and map source for each line
+  // Update the GeoJSON data and map source for each line that contains the station
   function markStationsAsGuessed(stations: string | string[]): void {
     const stationArray = Array.isArray(stations) ? stations : [stations];
-    const lines = game.getLines();
+    const lines = game.instance.getLines();
 
     if (lines) {
       stationArray.forEach((stationName) => {
@@ -133,40 +157,22 @@
       });
     }
   }
-
-  // Find coordinates for a station and then fly (zoom) to it
-  function flyToStation(station: string) {
-    const lines = game.getLines();
-
-    // A station can exist on multiple lines but they should be in the same location
-    // so only care about first match
-    if (lines) {
-      for (const line of lines) {
-        const coordinates = line.getStationCoordinates(station);
-        if (coordinates) {
-          mapManager.instance?.flyToCoords(coordinates, mapManager.instance?.getStationZoom());
-        }
-      }
-    }
-  }
 </script>
 
-<main>
-  <!-- Always display map -->
-  <Map />
+<!-- Always display map -->
+<Map />
 
-  <!-- Show modal for new games -->
-  {#if !$isGameStarted}
-    <StartModal />
-  {/if}
+<!-- Show modal selector for new games -->
+{#if !$isGameStarted}
+  <LineSelector />
+{/if}
 
-  <!-- Show guess input and menu if game is started -->
-  {#if $isGameStarted}
-    <OverlayBar onGuess={handleGuess} onReset={resetGame} />
-  {/if}
+<!-- Show guess input and menu if game is started -->
+{#if $isGameStarted}
+  <OverlayBar onGuess={handleGuess} onReset={resetGame} />
 
-  <!-- Show introduction only if game is started and it hasn't been seen -->
-  {#if $isGameStarted && !$hasSeenIntro}
-    <OverlayIntro />
+  <!--- Show introduction on first game -->
+  {#if !$hasSeenIntro}
+    <Introduction />
   {/if}
-</main>
+{/if}

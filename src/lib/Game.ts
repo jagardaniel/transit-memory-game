@@ -1,9 +1,14 @@
-import { Line } from "./Line";
+import type { Line } from "./Line";
 
 export enum GuessResult {
   Success = "success",
   Duplicate = "duplicate",
   Invalid = "invalid",
+}
+
+export interface LineStats {
+  completedGuesses: number;
+  totalStations: number;
 }
 
 export class Game {
@@ -13,6 +18,11 @@ export class Game {
   constructor() {
     this.lines = [];
     this.completedGuesses = new Set();
+  }
+
+  public clear(): void {
+    this.completedGuesses.clear();
+    this.lines = [];
   }
 
   public setLines(newLines: Line[]): void {
@@ -72,16 +82,32 @@ export class Game {
     return allStations;
   }
 
+  public getLineStats(lineName: string): LineStats | null {
+    const line = this.getLine(lineName);
+
+    if (line) {
+      const completedGuesses = line.getStations().filter((station) => this.completedGuesses.has(station)).length;
+      const totalStations = line.getStations().length;
+
+      return {
+        completedGuesses,
+        totalStations,
+      };
+    }
+
+    return null;
+  }
+
+  public getLine(lineName: string): Line | null {
+    const line = this.lines.find((line) => line.getName().toLowerCase() === lineName.toLowerCase());
+    return line ?? null;
+  }
+
   public getLines(): Line[] {
     return this.lines;
   }
 
   public getCompletedGuesses(): string[] {
     return Array.from(this.completedGuesses);
-  }
-
-  public clear(): void {
-    this.completedGuesses.clear();
-    this.lines = [];
   }
 }
