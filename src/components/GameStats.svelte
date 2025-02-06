@@ -35,7 +35,7 @@
     {#each lines as line}
       <div class="stat-row">
         <span class="stat-name">{line.line.getName()}</span>
-        <span class="stat-value" style="background: {line.line.getColor()}">
+        <span class="stat-value" style:background={line.line.getColor()}>
           {line.stats?.completedGuesses}/{line.stats?.totalStations}
         </span>
       </div>
