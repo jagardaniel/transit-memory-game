@@ -3,7 +3,7 @@
 
   import Map from "./components/Map.svelte";
   import { completedGuesses, hasSeenIntro, isGameStarted, selectedLines } from "./lib/localStorage";
-  import { game, guessState, mapManager } from "./lib/states.svelte";
+  import { game, guessState, mapManager, triggerGameUpdate } from "./lib/states.svelte";
   import OverlayBar from "./components/OverlayBar.svelte";
   import { LINES } from "./data/lines";
   import { Line } from "./lib/Line";
@@ -12,6 +12,7 @@
   import { GuessResult } from "./lib/Game";
   import LineSelector from "./components/LineSelector.svelte";
   import Introduction from "./components/Introduction.svelte";
+  import GameStats from "./components/GameStats.svelte";
 
   const isGameReady = $derived(mapManager.instance && $isGameStarted);
 
@@ -41,6 +42,9 @@
 
       // Mark completed guesses as guessed on the map
       markStationsAsGuessed(game.instance.getCompletedGuesses());
+
+      // Trigger update for components using game
+      triggerGameUpdate.value++;
     }
   }
 
@@ -133,6 +137,9 @@
         markStationsAsGuessed(station);
         flyToStation(station);
       }
+
+      // Trigger update for components using game
+      triggerGameUpdate.value++;
     } else if (result === GuessResult.Duplicate) {
       guessState.status = "duplicate";
     } else {
@@ -167,9 +174,10 @@
   <LineSelector />
 {/if}
 
-<!-- Show guess input and menu if game is started -->
+<!-- Show guess input, menu and stats if game is started -->
 {#if $isGameStarted}
   <OverlayBar onGuess={handleGuess} onReset={resetGame} />
+  <GameStats />
 
   <!--- Show introduction on first game -->
   {#if !$hasSeenIntro}
