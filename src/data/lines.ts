@@ -55,17 +55,17 @@ export const LINES_MENU = [
 export const LINES = {
   tunnelbanan: [
     {
-      name: "Röda linjen",
-      shortName: "red",
-      city: LineCity.Stockholm,
-      color: "#d71d24",
-      type: LineType.Metro,
-    },
-    {
       name: "Gröna linjen",
       shortName: "green",
       city: LineCity.Stockholm,
       color: "#148541",
+      type: LineType.Metro,
+    },
+    {
+      name: "Röda linjen",
+      shortName: "red",
+      city: LineCity.Stockholm,
+      color: "#d71d24",
       type: LineType.Metro,
     },
     {

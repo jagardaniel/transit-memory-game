@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
+  import { game } from "../lib/states.svelte";
+  import { showToast } from "../lib/toast.svelte";
 
   let { onReset } = $props();
 
@@ -25,6 +27,50 @@
       visible = false;
     }
   }
+
+  function handleReset() {
+    visible = false;
+
+    const message = "Är du säker på att du vill starta om? Detta kommer återställa alla dina nuvarande gissningar.";
+
+    if (confirm(message)) {
+      onReset();
+    }
+  }
+
+  async function handleCopyStats() {
+    visible = false;
+
+    let text = "";
+
+    const lines = game.instance.getLines();
+
+    lines.forEach((line) => {
+      const lineName = line.getName();
+      const lineStats = game.instance.getLineStats(lineName);
+
+      if (lineStats) {
+        text += `${lineName}: ${lineStats.completedGuesses}/${lineStats.totalStations}\n`;
+      }
+    });
+
+    if (lines.length > 1) {
+      const totalCompletedGuesses = game.instance.getCompletedGuesses().length;
+      const totalStations = game.instance.getStations().length;
+
+      text += `\nTotalt: ${totalCompletedGuesses}/${totalStations}`;
+    } else {
+      // Remove last newline character
+      text = text.slice(0, -1);
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast("Resultet har kopierats till urklippet!", 2500);
+    } catch (error) {
+      console.error("Unable to copy text to clipbaord");
+    }
+  }
 </script>
 
 <button class="menu-button" onclick={toggleDropdown}>
@@ -33,7 +79,8 @@
 
 {#if visible}
   <div class="dropdown-menu" bind:this={dropdownRef}>
-    <div class="dropdown-item" onclick={onReset}>Nytt spel</div>
+    <div class="dropdown-item" onclick={handleReset}>Nytt spel</div>
+    <div class="dropdown-item" onclick={handleCopyStats}>Kopiera resultat</div>
   </div>
 {/if}
 

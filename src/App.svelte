@@ -13,6 +13,8 @@
   import LineSelector from "./components/LineSelector.svelte";
   import Introduction from "./components/Introduction.svelte";
   import GameStats from "./components/GameStats.svelte";
+  import { toast } from "./lib/toast.svelte";
+  import Toast from "./components/Toast.svelte";
 
   const isGameReady = $derived(mapManager.instance && $isGameStarted);
 
@@ -183,4 +185,9 @@
   {#if !$hasSeenIntro}
     <Introduction />
   {/if}
+{/if}
+
+<!-- Show toast message -->
+{#if toast.value}
+  <Toast message={toast.value.message} duration={toast.value.duration} />
 {/if}

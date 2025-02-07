@@ -46,7 +46,7 @@
       <div class="separator"></div>
 
       <div class="stat-row">
-        <span class="stat-name">Total</span>
+        <span class="stat-name">Totalt</span>
         <span class="stat-value" style="color: #666666">{totalCompletedGuesses}/{totalStations}</span>
       </div>
     {/if}
@@ -56,8 +56,8 @@
 <style>
   .overlay-stats {
     position: absolute;
-    top: 40px;
-    right: 40px;
+    top: 5%;
+    right: 20px;
     width: 270px;
     background-color: #fff;
     padding: 8px;
@@ -77,7 +77,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 0;
+    padding: 3px 0;
   }
 
   .stat-name {
