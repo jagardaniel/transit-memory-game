@@ -30,6 +30,13 @@ export const LINES_MENU = [
     icon: "icons/rail.svg",
   },
   {
+    name: "Saltsjöbanan (utan Slussen)",
+    shortName: "saltsjobanan",
+    stations: 17,
+    color: "#009aa4",
+    icon: "icons/rail.svg",
+  },
+  {
     name: "Lidingöbanan",
     shortName: "lidingobanan",
     stations: 13,
@@ -133,6 +140,16 @@ export const LINES = {
       shortName: "roslagsbanan",
       city: LineCity.Stockholm,
       color: "#a25ea6",
+      type: LineType.LightRail,
+    },
+  ],
+
+  saltsjobanan: [
+    {
+      name: "Saltsjöbanan",
+      shortName: "saltsjobanan",
+      city: LineCity.Stockholm,
+      color: "#009aa4",
       type: LineType.LightRail,
     },
   ],

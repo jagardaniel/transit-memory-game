@@ -1,8 +1,11 @@
 
 Add a new line
 
-1. https://overpass-turbo.eu/
-2. Run query (for red line metro as example):
+1. Find the complete relation of the line on https://www.openstreetmap.org and save the relation id.
+For example, 6286474 for Ropsten - Norsborg and 6286476 for Mörby centrum - Fruängen.
+
+2. https://overpass-turbo.eu/
+3. Add the id(s) inside a rel() and the run the query:
 
 [out:json][timeout:25];
 (
@@ -12,12 +15,12 @@ Add a new line
 (._;>;);
 out body;
 
-3. Export data as GeoJSON
-4. Save to src/scripts/in
-5. scripts$ python3 prepare_geojson.py -f in/<name>.geojson -c "color"
-Example: python3 prepare_geojson.py -f in/blue.geojson -c "#007db8"
-6. Copy out/line.geojson to public/geojson/<type>/<name>.geojson
-7. Add the line to src/LineSetup.ts
+4. Export the data as GeoJSON.
+5. Save to src/scripts/in
+6. scripts$ python3 prepare_geojson.py in/<name>.geojson
+Example: python3 prepare_geojson.py in/red.geojson
+7. Copy out/line.geojson to public/geojson/<city>/<type>/<name>.geojson
+8. Add the line to data/lines.ts
 
 --------------------------------------------------------------------
 
@@ -62,5 +65,6 @@ Pendeltåg (#f266a6):
 -- Tåg 44: Tåg 44: Tumba - Kallhäll (8518400)
 -- Tåg 48: Tåg 48: Södertälje centrum - Gnesta (3304345)
 
-Salstjöbanan
--- Closed, under construction.
+Saltsjöbanan (without Slussen) (#009aa4):
+-- Saltsjöbanan 25 Henriksdal - Igelboda - Saltsjöbaden (251489)
+-- Saltsjöbanan 26 Igelboda - Solsidan (251496)

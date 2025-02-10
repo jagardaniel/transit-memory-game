@@ -139,6 +139,9 @@ export class MapManager {
 
     // Set a minimum zoom level for the station markers. Based on how much "area" the lines covers.
     // Definitely not perfect right now, should be adjusted in the future.
+
+    // Disabled for now, not sure if even needed
+    /*
     let minZoom = 10;
 
     const bounds = this.getBounds(geoJSONData);
@@ -148,6 +151,7 @@ export class MapManager {
         minZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 0.1 : cameraOptions.zoom;
       }
     }
+      */
 
     // Draw text labels for stations. Only visible if guessed property is set to true
     this.map.addLayer({
@@ -167,7 +171,7 @@ export class MapManager {
         "text-halo-blur": 1,
       },
       filter: ["==", ["get", "guessed"], true],
-      minzoom: minZoom,
+      //minzoom: minZoom,
     });
   }
 
