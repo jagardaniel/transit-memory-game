@@ -76,7 +76,7 @@ export class MapManager {
     this.flyToCoords(this.initialCenter, this.initialZoom);
   }
 
-  public drawGeoJSON(baseName: string, lineColor: string, geoJSONData: FeatureCollection): void {
+  public drawGeoJSON(baseName: string, lineColor: string, markersMinZoom: number, geoJSONData: FeatureCollection): void {
     // Add source layer
     this.map.addSource(baseName, {
       type: "geojson",
@@ -141,7 +141,6 @@ export class MapManager {
     // Definitely not perfect right now, should be adjusted in the future.
 
     // Disabled for now, not sure if even needed
-    /*
     let minZoom = 10;
 
     const bounds = this.getBounds(geoJSONData);
@@ -151,7 +150,6 @@ export class MapManager {
         minZoom = cameraOptions.zoom < 11 ? cameraOptions.zoom + 0.1 : cameraOptions.zoom;
       }
     }
-      */
 
     // Draw text labels for stations. Only visible if guessed property is set to true
     this.map.addLayer({
@@ -160,7 +158,17 @@ export class MapManager {
       source: baseName,
       layout: {
         "text-field": ["get", "name"],
-        "text-size": 11,
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10,
+          9, // At zoom level 10, text size is 9
+          11,
+          10, // At zoom level 11, text size is 10
+          12,
+          11, // At zoom level 12, text size is 11
+        ],
         "text-anchor": "bottom",
         "text-offset": [0, -0.5],
       },
@@ -171,7 +179,7 @@ export class MapManager {
         "text-halo-blur": 1,
       },
       filter: ["==", ["get", "guessed"], true],
-      //minzoom: minZoom,
+      minzoom: markersMinZoom,
     });
   }
 

@@ -95,4 +95,26 @@
   .start-button:focus {
     outline: none;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .modal-content {
+      padding: 15px;
+      max-width: 90%;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    .start-button {
+      font-size: 14px;
+      padding: 12px;
+      margin-top: 15px;
+    }
+  }
 </style>

@@ -4,7 +4,7 @@ https://jagardaniel.github.io/transit-memory-game/
 
 A station name guessing game for the Swedish public transport system. Very inspired by [London Tube Memory Game](https://london.metro-memory.com/) and [light-rail-game](https://github.com/simonprickett/light-rail-game).
 
-Currently supported lines (Stockholm):
+Current lines (Stockholm):
 
 - Tunnelbanan (gröna, blå, röda)
 - Pendeltåg
@@ -13,6 +13,7 @@ Currently supported lines (Stockholm):
 - Lidingöbanan
 - Spårväg City
 - Nockebybanan
+- Saltsjöbanan (without Slussen - under construction)
 
 ## Description
 

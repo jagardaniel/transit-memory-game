@@ -80,4 +80,19 @@
     font-size: 14px;
     color: #666;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .line-option {
+      height: 50px;
+    }
+
+    .line-text-name {
+      font-size: 16px;
+    }
+
+    .line-text-stations {
+      font-size: 12px;
+    }
+  }
 </style>

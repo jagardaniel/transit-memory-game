@@ -12,9 +12,10 @@
   import { GuessResult } from "./lib/Game";
   import LineSelector from "./components/LineSelector.svelte";
   import Introduction from "./components/Introduction.svelte";
-  import GameStats from "./components/GameStats.svelte";
-  import { toast } from "./lib/toast.svelte";
+  import { showToast, toast } from "./lib/toast.svelte";
   import Toast from "./components/Toast.svelte";
+  import type { LngLatLike } from "maplibre-gl";
+  import GameStats from "./components/GameStats.svelte";
 
   const isGameReady = $derived(mapManager.instance && $isGameStarted);
 
@@ -47,6 +48,16 @@
 
       // Trigger update for components using game
       triggerGameUpdate.value++;
+
+      // OpenStreetMap data for Saltsjöbanan does not include Slussen right now (under construction)
+      // Show this information
+      const includesSaltsjobanan = lines.some((line) => line.getName() === "Saltsjöbanan");
+
+      if (includesSaltsjobanan) {
+        setTimeout(() => {
+          showToast("Saltsjöbanan innehåller inte station Slussen för tillfället (under ombyggnad)", 4000);
+        }, 300);
+      }
     }
   }
 
@@ -76,32 +87,59 @@
 
   // Draw GeoJSON data on the map for each selected line
   function drawLines(lines: Line[]) {
+    // Get suggested min zoom level for station markers based on the bounds for all selected lines
+    let markersMinZoom = getMarkersMinZoom(lines);
+
+    if (!markersMinZoom) {
+      markersMinZoom = 10;
+    }
+
     lines.forEach((line) => {
-      mapManager.instance?.drawGeoJSON(line.getBaseName(), line.getColor(), line.getGeoJSONData());
+      mapManager.instance?.drawGeoJSON(line.getBaseName(), line.getColor(), markersMinZoom, line.getGeoJSONData());
     });
   }
 
-  // Fly to a map view that covers all selected lines
-  function flyToFitView(lines: Line[]) {
+  // Get camera (center/zoom) for all specified lines
+  function getCameraForBounds(lines: Line[]): { center: LngLatLike; zoom: number } | null {
     const geoJSONData: FeatureCollection[] = lines.map((line) => line.getGeoJSONData());
 
     // Get the overall bounding box based on the GeoJSON data from all selected lines
     const boundingBox = mapManager.instance?.getMergedBounds(geoJSONData);
-    if (!boundingBox) return;
+    if (!boundingBox) return null;
 
     // Get desired center and zoom level for the bounding box
     const view = mapManager.instance?.getCameraForBounds(boundingBox);
-    if (!view) return;
+    if (!view) return null;
 
-    mapManager.instance?.flyToCoords(view.center, view.zoom);
+    return { center: view.center, zoom: view.zoom };
+  }
+
+  // Fly to a map view that covers all selected lines
+  function flyToFitView(lines: Line[]) {
+    const camera = getCameraForBounds(lines);
+
+    if (camera) {
+      mapManager.instance?.flyToCoords(camera.center, camera.zoom);
+    }
+  }
+
+  // Get a suggested minimum zoom level for station markers based on selected lines
+  function getMarkersMinZoom(lines: Line[]): number | null {
+    const camera = getCameraForBounds(lines);
+    if (!camera) return null;
+
+    return camera.zoom < 11 ? camera.zoom + 0.1 : camera.zoom - 1;
   }
 
   function flyToStation(station: string) {
     const lines = game.instance.getLines();
 
-    // A station can exist on multiple lines but since they should be very close together
-    // finding the first match should be enough
+    // A station can exist on multiple lines. Find the line that has the closest zoom level
+    // and use it for the zoom and coordinates
     if (lines) {
+      let matchCoordinates: LngLatLike | null = null;
+      let highestZoom = 0;
+
       for (const line of lines) {
         const coordinates = line.getStationCoordinates(station);
 
@@ -111,12 +149,15 @@
           if (!bounds) return;
 
           const zoom = mapManager.instance?.getStationZoomForBounds(bounds);
-          if (!zoom) return;
-
-          mapManager.instance?.flyToCoords(coordinates, zoom);
-
-          return;
+          if (zoom && zoom > highestZoom) {
+            highestZoom = zoom;
+            matchCoordinates = coordinates;
+          }
         }
+      }
+
+      if (matchCoordinates && highestZoom !== 0) {
+        mapManager.instance?.flyToCoords(matchCoordinates, highestZoom);
       }
     }
   }

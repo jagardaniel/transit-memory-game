@@ -62,4 +62,24 @@
       transform: translateY(0);
     }
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .intro-content {
+      padding: 15px;
+      width: 80%;
+    }
+
+    .intro-content h2 {
+      font-size: 1.4rem;
+    }
+
+    .intro-content p {
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+    }
+  }
 </style>

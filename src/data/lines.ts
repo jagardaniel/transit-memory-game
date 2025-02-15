@@ -30,7 +30,7 @@ export const LINES_MENU = [
     icon: "icons/rail.svg",
   },
   {
-    name: "Saltsjöbanan (utan Slussen)",
+    name: "Saltsjöbanan",
     shortName: "saltsjobanan",
     stations: 17,
     color: "#009aa4",

@@ -35,4 +35,17 @@
     flex: 0 0 10%;
     margin-left: 5px;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .overlay-bar {
+      top: 2%;
+      width: 100%;
+      padding: 15px;
+    }
+
+    .overlay-menu {
+      flex: 0 0 12%;
+    }
+  }
 </style>

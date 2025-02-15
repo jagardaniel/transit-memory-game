@@ -125,4 +125,17 @@
   .dropdown-item:hover {
     background: #f0f0f0;
   }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .dropdown-menu {
+      font-size: 13px;
+      right: 20px;
+      margin-top: 0px;
+    }
+
+    .dropdown-item {
+      padding: 10px 15px;
+    }
+  }
 </style>

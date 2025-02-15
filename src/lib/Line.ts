@@ -14,10 +14,11 @@ export enum LineCity {
 // Alternative spelling for stations.
 // Should probably be in another file
 const stationCorrections: Record<string, string> = {
+  // General
   "t centralen": "T-Centralen",
   centralen: "T-Centralen",
 
-  // Metro specific
+  // Metro
   "st eriksplan": "S:t Eriksplan",
   "sankt eriksplan": "S:t Eriksplan",
   "sundbyberg centrum": "Sundbybergs centrum",
@@ -38,6 +39,10 @@ const stationCorrections: Record<string, string> = {
 
   // Nockebybanan
   alleparken: "Alléparken",
+
+  // Saltsjöbanan
+  "saltsjö järla": "Saltsjö-Järla",
+  "saltsjö duvnäs": "Saltsjö-Duvnäs",
 };
 
 export class Line {

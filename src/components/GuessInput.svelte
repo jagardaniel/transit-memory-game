@@ -39,6 +39,7 @@
     border: 1px solid rgba(85, 85, 85, 0.5);
     border-radius: 10px;
     color: #363636;
+    background: #ffffff;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     /* Icon */
